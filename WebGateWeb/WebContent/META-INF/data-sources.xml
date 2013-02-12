@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<data-sources >
+    <connection-pool name="connection-pool-qop">
+        <connection-factory factory-class="org.postgresql.ds.PGPoolingDataSource" user="qop" password="qop" url="jdbc:postgresql://localhost:5432/qop">
+        	<property name="serverName" value="localhost" />
+			<property name="portNumber" value="5432" />
+			<property name="databaseName" value="qop" />
+        </connection-factory>
+    </connection-pool>
+    <managed-data-source name="connection-managed-qop" jndi-name="jdbc/qop" connection-pool-name="connection-pool-qop"/>
+</data-sources>

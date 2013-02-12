@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	template="/layout/template.xhtml">
+	<ui:define name="pageTitle">
+	
+		<!-- <h2>Llenar Encuesta</h2> -->
+		<ice:panelGrid columns="2" cellpadding="6">
+			<ice:outputLabel value="Encuesta actual" />
+			<ice:outputText value="#{fillSurvey.survey.surveyStructure.name}" />
+
+			<ice:outputLabel value="Encuesta madre"
+				rendered="#{not empty fillSurvey.survey.parentSurvey.surveyStructure and not sessionBean.surveyed}" />
+			<ice:outputText
+				value="#{fillSurvey.survey.parentSurvey.surveyStructure.name}"
+				rendered="#{not empty fillSurvey.survey.parentSurvey.surveyStructure and not sessionBean.surveyed}" />
+
+			<ice:outputLabel
+				value="Periodo de referencia"
+				rendered="#{fillSurvey.referenceTimeEnabled}" />
+			<ice:outputText
+				value="#{fillSurvey.referenceTime}"
+				rendered="#{fillSurvey.referenceTimeEnabled}" />
+
+			<ice:outputText
+				value="#{fillSurvey.parentIdentityQuestionText}"
+				rendered="#{fillSurvey.hasParentIdentifyQuestion}" escape="false" />
+			<ice:outputText
+				value="#{fillSurvey.parentAnswerIdentityQuestionText}"
+				rendered="#{fillSurvey.hasParentIdentifyQuestion}" />
+			
+			<ice:outputText
+				value="#{fillSurvey.identityQuestionText}"
+				rendered="#{fillSurvey.hasIdentifyQuestion}" escape="false" /> 
+			<ice:outputText
+				value="#{fillSurvey.answerIdentityQuestionText}"
+				rendered="#{fillSurvey.hasIdentifyQuestion}" />
+			</ice:panelGrid>
+		<ice:panelGrid renderedOnUserRole="ADMINISTRADOR,ENCUESTADOR">
+			<ice:commandLink action="show_children_surveys.xhtml" 
+				value="Ver encuesta madre"
+				rendered="#{not empty fillSurvey.survey.parentSurvey.surveyStructure}">
+				<f:param name="parentSurveyId"
+					value="#{fillSurvey.survey.parentSurvey.id}" />
+			</ice:commandLink>
+			<ice:commandLink id="list2" action="show_surveys" value="Ver el listado de encuestas" rendered="#{empty fillSurvey.survey.parentSurvey}" renderedOnUserRole="ADMINISTRADOR,ENCUESTADOR">
+				<f:param name="surveyStructureId" value="#{fillSurvey.survey.surveyStructure.id}" />
+			</ice:commandLink>
+		</ice:panelGrid>
+		<!-- 
+		<ice:commandLink id="modify" action="#{fillSurvey.open}" value="Modificar" renderedOnUserRole="ADMINISTRADOR,ENCUESTADO" rendered="#{fillSurvey.endedState}" />
+		 -->
+	</ui:define>
+		
+	<ui:define name="pageBody">
+		<br/>
+		<ice:panelGroup panelTooltip="helpText" rendered="#{not empty fillSurvey.question.helpText}" >
+			<ice:panelGrid columns="2">
+				<ice:graphicImage url="/img/help.png" />
+				<ice:outputText value="#{fillSurvey.question.text}" id="questionText" escape="false" />
+			</ice:panelGrid>
+		</ice:panelGroup>
+		
+		<ice:outputText value="#{fillSurvey.question.id}&lt;br/&gt;#{fillSurvey.question.key}&lt;br/&gt;" id="questionKey" renderedOnUserRole="ADMINISTRADOR" escape="false"/>
+		
+		<ice:outputText value="#{fillSurvey.question.text}" id="questionText2" rendered="#{empty fillSurvey.question.helpText}" escape="false"/>
+	
+		<ice:panelTooltip id="helpText"
+                              style="width: 300px;"
+                              displayOn="hover"
+                              hoverDelay="250">
+                <f:facet name="body">
+                    #{fillSurvey.question.helpText}
+                </f:facet>
+            </ice:panelTooltip>
+		
+		<div align="center">
+			<ui:include src="#{fillSurvey.displayViewComponent}">
+				<ui:param name="question" value="#{fillSurvey.question}" />
+				<ui:param name="fillViewAdapter"
+					value="#{fillSurvey.locateFillViewAdapter(fillSurvey.question)}" />
+			</ui:include>
+		</div>
+		<br />
+		<ice:panelGrid columns="5" border="0" cellpadding="5" rendered="#{not fillSurvey.endedState}">
+			<ice:commandButton value="&lt; Guardar y Anterior"
+				action="#{fillSurvey.saveAndGoToPreviousQuestion}"
+				rendered="#{fillSurvey.previousEnabled}" />
+			<ice:commandButton value="Guardar" action="#{fillSurvey.save}"  />
+			<ice:commandButton id="saveAndNext" value="Guardar y Siguiente &gt;" 
+				action="#{fillSurvey.saveAndGoToNextQuestion}" tabindex="2" onclick="return enfocar();" onkeypress="return enfocar(event);" />
+			<!-- 
+			<ice:commandButton value="Guardar y Siguiente &gt;"
+				action="#{fillSurvey.saveAndGoToNextQuestion}" tabindex="2" rendered="#{fillSurvey.nextEnabled}" />
+				 
+			<ice:commandButton value="Guardar y Finalizar" action="#{fillSurvey.saveAndGoToNextQuestion}" tabindex="2"
+				rendered="#{not fillSurvey.nextEnabled}" />
+			 -->
+		</ice:panelGrid>
+		<!-- 
+		<ice:panelGrid columns="5" border="0" cellpadding="5" rendered="#{fillSurvey.endedState}" renderedOnUserRole="ENCUESTADO">
+			<ice:commandButton value="Actualizar" action="#{fillSurvey.save}" />
+		</ice:panelGrid>
+		 -->
+		<h:panelGrid columns="5" border="0" cellpadding="5" rendered="#{fillSurvey.endedState or sessionBean.admin}" renderedOnUserRole="ADMINISTRADOR">
+			<ice:commandButton value="&lt; Anterior"
+				action="#{fillSurvey.goToPreviousQuestion}"
+				rendered="#{fillSurvey.previousEnabled}" />
+		    
+		    <ice:commandButton value="Actualizar" action="#{fillSurvey.save}" rendered="#{fillSurvey.refreshable}" />
+		    
+			<ice:commandButton value="Siguiente &gt;"
+				action="#{fillSurvey.goToNextQuestion}"
+				rendered="#{fillSurvey.nextEnabled}" />
+		</h:panelGrid>
+		
+		
+		
+	</ui:define>
+	
+</ui:composition>

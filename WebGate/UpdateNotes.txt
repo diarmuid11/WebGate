@@ -1,0 +1,59 @@
+Versión 1.3
+
+* Actualizar en la Base de datos:
+
+	- Actualizar el estado de la encuesta "Completando" por "Pendiente"  
+		UPDATE surveys.survey_states SET name = 'Pendiente' WHERE id = 1;
+
+	- Agregar la columna de texto de ayuda de la pregunta
+		ALTER TABLE surveys.questions ADD COLUMN help_text character varying(500) null;
+	
+	- Agregar la columna de nombre completo al usuario
+		ALTER TABLE surveys.principals ADD COLUMN complete_name character varying(500) null;
+	
+	- Actualizar los tipos de pregunta de viajeros
+		UPDATE surveys.questions SET question_type_id = 14 WHERE text = 'No. Planilla';
+		UPDATE surveys.questions SET question_type_id = 14 WHERE text = 'ID';
+		
+	- Agregar la columna de periodo de referencia a las encuestas
+		ALTER TABLE surveys.surveys ADD COLUMN reference_time timestamp without time zone null default now();
+	
+	- Crear tabla de propiedades de configuración
+		CREATE TABLE surveys.config_properties (
+			id serial NOT NULL,
+			key character varying(70) not null,
+			value character varying(100) not null,
+			survey_structure_id integer null
+		);
+	
+		ALTER TABLE surveys.config_properties ADD CONSTRAINT pkey_id PRIMARY KEY (id);
+		ALTER TABLE surveys.config_properties ADD CONSTRAINT fkey_survy_structure_id FOREIGN KEY (survey_structure_id) REFERENCES surveys.survey_structures(id);
+		ALTER TABLE surveys.config_properties ADD CONSTRAINT unique_key UNIQUE (key,survey_structure_id);
+	
+	- Actualizar validaciones de la Planilla de Viajeros y Formulario de Viajeros
+		insert into surveys.validations VALUES(((select max(id) from surveys.validations))+1,'La selección de Encuestador es obligatoria','true',3,381,now(),null,null,'preg_211_B_mand_1')	
+		insert into surveys.validations VALUES(((select max(id) from surveys.validations))+1,'La selección de Critico es obligatoria','true',3,382,now(),null,null,'preg_211_C_mand_1');
+		insert into surveys.validations VALUES(((select max(id) from surveys.validations))+1,'La selección de Supervisor es obligatoria','true',3,383,now(),null,null,'preg_211_D_mand_1');
+		insert into surveys.validations VALUES(((select max(id) from surveys.validations))+1,'La selección de Digitador es obligatoria','true',3,384,now(),null,null,'preg_211_E_mand_1');
+		insert into surveys.validations VALUES(((select max(id) from surveys.validations))+1,'El Lugar de aplicación es obligatorio','true',3,393,now(),null,null,'preg_211_L_mand_1');
+		INSERT INTO surveys.validations VALUES ((SELECT MAX(id) FROM surveys.validations)+ 1,'El Destino es obligatorio','true',3,399,now(),null,null,'preg_211_M_mand_1');
+		INSERT INTO surveys.validations VALUES ((SELECT MAX(id) FROM surveys.validations)+ 1,'El Numero de Vuelo es obligatorio','true',3,400,now(),null,null,'preg_211_N_mand_1');
+		INSERT INTO surveys.validations VALUES ((SELECT MAX(id) FROM surveys.validations)+ 1,'El Numero de Placa es obligatorio','true',3,401,now(),null,null,'preg_211_O_mand_1');
+		INSERT INTO surveys.validations VALUES ((SELECT MAX(id) FROM surveys.validations)+ 1,'La pregunta es obligatoria','true',3,404,now(),null,null,'preg_212_B_mand_1');
+		INSERT INTO surveys.validations VALUES ((SELECT MAX(id) FROM surveys.validations)+ 1,'El Estado es obligatorio','true',3,417,now(),null,null,'preg_212_E_mand_1');
+		INSERT INTO surveys.validations VALUES ((SELECT MAX(id) FROM surveys.validations)+ 1,'El Encuestador es obligatorio','true',3,639,now(),null,null,'preg_212_X_mand_1');
+		INSERT INTO surveys.validations VALUES ((SELECT MAX(id) FROM surveys.validations)+ 1,'El Lugar de residencia es obligatorio','true',3,421,now(),null,null,'preg_212_F_mand_1');
+		INSERT INTO surveys.validations VALUES ((SELECT MAX(id) FROM surveys.validations)+ 1,'La pregunta es obligatoria','true',3,430,now(),null,null,'preg_212_I_mand_1');
+		INSERT INTO surveys.validations VALUES ((SELECT MAX(id) FROM surveys.validations)+ 1,'La pregunta es obligatoria','true',3,437,now(),null,null,'preg_212_K_mand_1');
+		INSERT INTO surveys.validations VALUES ((SELECT MAX(id) FROM surveys.validations)+ 1,'La pregunta es obligatoria','true',3,408,now(),null,null,'preg_212_D_mand_1');
+		
+	- Agragar el estado Cerrada a los estados de encuesta
+		insert into surveys.survey_states VALUES (4, 'Cerrada')	
+		
+	- Agregar el tipo de pregunta obligatoria a las listas de opción
+		INSERT INTO surveys.question_types_validation_types values (11,3);
+	
+	- Agregar restriccion para el key de las preguntas y para validaciones
+		ALTER TABLE surveys.questions ADD CONSTRAINT unique_key_value UNIQUE (key )
+		ALTER TABLE surveys.validations ADD CONSTRAINT unique_validationkey_value UNIQUE (key )
+	

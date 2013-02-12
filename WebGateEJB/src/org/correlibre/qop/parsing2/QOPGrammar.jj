@@ -1,0 +1,411 @@
+ /**
+ * JavaCC template file created by SF JavaCC plugin 1.5.17+ wizard for JavaCC 1.5.0+ 
+ */
+options
+{
+  JDK_VERSION = "1.6";
+  LOOKAHEAD = 8;
+  //FORCE_LA_CHECK = true; 
+  static = false;
+}
+
+PARSER_BEGIN(QOPGrammar)
+package org.correlibre.qop.parsing2;
+import java.io.StringReader;
+import java.io.Reader;
+import java.util.Map;
+import java.util.HashMap;
+
+public class QOPGrammar
+{
+  private boolean result;
+
+  private Map <String, String> values;
+
+  public QOPGrammar(String src, Map <String, String> values)
+  {
+    this ((Reader) (new StringReader(src)));
+    this.values = values;
+    System.out.println("src: "+src);
+    
+  }
+
+  public static void main(String args []) throws ParseException
+  {
+    try
+    {
+      String rule = args [0];
+      Map < String, String > values = new HashMap < String, String > ();
+      values.put("preg_233_E_A_H", "0");
+      values.put("preg_233_E_C", "null");
+      values.put("preg_233_E_B_H", "0");
+      values.put("preg_4", "null");
+      QOPGrammar parser = new QOPGrammar(rule, values);
+      parser.parse();
+      System.out.println("\nresult: "+parser.getResult());
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  public boolean getResult()
+  {
+    return result;
+  }
+}
+
+PARSER_END(QOPGrammar)
+
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+}
+
+TOKEN : /* OPERATORS */
+{
+  < LP : "(" >
+| < RP : ")" >
+| < EQ : "=" >
+| < NEQ : "!=" >
+| < LT : "<" >
+| < LTE : "<=" >
+| < GT : ">" >
+| < GTE : ">=" >
+| < AND : "&&" >
+| < OR : "||" >
+| < PLUS : "+" >
+| < MINUS : "-" >
+| < TIMES : "*" >
+| < DIVIDE : "/" >
+}
+
+TOKEN :
+{
+  < QUOTED_STRING : "\'" (~[ "\'" ])+ "\'" | "null" >
+| < KEYSTRING : "preg" ([ "A"-"Z", "0"-"9", "a"-"z", "_" ])+ >
+| < NUMBER :
+    ([ "0"-"9" ])+
+  | ([ "0"-"9" ])+ "." ([ "0"-"9" ])+
+  | ([ "0"-"9" ])+ "." >
+| < BOOL :
+    "true"
+  | "false" >
+}
+
+void parse() :
+{
+
+}
+{  
+    expression()
+  |
+  <LP>
+  expression()
+  <RP>
+    <EOF>
+}
+
+void expression() :
+{
+  boolean b1;
+  boolean b2;
+
+  Boolean lResult = null;
+}
+{
+  (    (      
+    (
+      b1 = compositeBooleanExpression(){ lResult = b1; System.out.println("\nlResult1: "+lResult); }
+    )
+  |
+  (
+    < LP >
+      b1 = compositeBooleanExpression(){ lResult = b1; System.out.println("\nlResult2: "+lResult); }
+     < RP >
+    )
+)
+    (
+        < OR >  b2 = compositeBooleanExpression() { lResult = lResult || b2; System.out.println("\nlResult4 ("+lResult+" || "+b2+"): "+lResult);} 
+      | < AND >  b2 = compositeBooleanExpression() { lResult = lResult && b2; System.out.println("\nlResult5("+lResult+" && "+b2+"): "+lResult);}
+      | < OR > < LP > b2 = compositeBooleanExpression() { lResult = lResult || b2; System.out.println("\nlResult6: "+lResult);} < RP >
+      | < AND > < LP > b2 = compositeBooleanExpression() { lResult = lResult && b2; System.out.println("\nlResult7: "+lResult);} < RP >      
+      )*
+  
+)
+  
+  {result = lResult;System.out.println("\nlResultFinal: "+lResult);}
+}
+
+boolean compositeBooleanExpression() :{  boolean b1;  boolean b2;  Boolean lResult = null;}{  (
+        (      b1 = booleanExpression()      {        lResult = b1;      }       (        < OR > b2 = booleanExpression() {  lResult = lResult || b2; }      | < AND > b2 = booleanExpression() { lResult = lResult && b2; }      )*
+    )  )  {return lResult;}}
+
+boolean booleanExpression() :
+{
+  double n1;
+  double n2;
+
+  boolean b1;
+  boolean b2;
+  boolean boolExp;
+
+  String s1;
+  String s2;
+}
+{
+  (
+  < LP >
+  n1 = numericTerm() < EQ > n2 = numericTerm()  {System.out.println("(n1:"+n1+"= n2:"+n2); return (n1 == n2); }
+  | n1 = numericTerm() < NEQ > n2 = numericTerm()  {System.out.println("(n1:"+n1+" != n2:"+n2); return (n1 != n2);  }
+  | n1 = numericTerm() < LT > n2 = numericTerm()  {System.out.println("(n1:"+n1+" < n2:"+n2); return (n1 < n2);  }    
+  | n1 = numericTerm() < LTE > n2 = numericTerm()  {System.out.println("(n1:"+n1+" <= n2:"+n2); return (n1 <= n2);  }
+  | n1 = numericTerm() < GT > n2 = numericTerm()  {System.out.println("(n1:"+n1+" > n2:"+n2); return (n1 > n2);  }
+  | n1 = numericTerm() < GTE > n2 = numericTerm()  {System.out.println("(n1:"+n1+" >= n2:"+n2); return (n1 >= n2);  }
+  < RP >
+  )
+|
+ (
+  n1 = numericTerm() < EQ > n2 = numericTerm()  {System.out.println("n1:"+n1+" n2:"+n2); return (n1 == n2); }
+  | n1 = numericTerm() < NEQ > n2 = numericTerm()  { return (n1 != n2);  }
+  | n1 = numericTerm() < LT > n2 = numericTerm()  { return (n1 < n2);  }    
+  | n1 = numericTerm() < LTE > n2 = numericTerm()  { return (n1 <= n2);  }
+  | n1 = numericTerm() < GT > n2 = numericTerm()  { return (n1 > n2);  }
+  | n1 = numericTerm() < GTE > n2 = numericTerm()  { return (n1 >= n2);  }
+  )
+|
+ (
+  < LP >
+  b1 = booleanTerm() < EQ > b2 = booleanTerm() { return (b1 == b2);  }
+  | b1 = booleanTerm() < NEQ > b2 = booleanTerm() { return (b1 != b2);  }
+  | b1 = booleanTerm() < OR > b2 = booleanTerm() { return (b1 || b2);  }
+  | b1 = booleanTerm() < AND > b2 = booleanTerm() { return (b1 && b2);  }
+  < RP >
+  )
+|
+ (
+  b1 = booleanTerm() < EQ > b2 = booleanTerm() { return (b1 == b2);  }
+  | b1 = booleanTerm() < NEQ > b2 = booleanTerm() { return (b1 != b2);  }
+  | b1 = booleanTerm() < OR > b2 = booleanTerm() { return (b1 || b2);  }
+  | b1 = booleanTerm() < AND > b2 = booleanTerm() { return (b1 && b2);  }
+  )
+|
+ (
+  < LP >
+  s1= qStringTerm() < EQ > s2 = qStringTerm() { return (s1.equalsIgnoreCase(s2));  }
+  | s1 = qStringTerm() < NEQ > s2 = qStringTerm() { return (!s1.equalsIgnoreCase(s2));  }
+  < RP >
+  )
+|
+ (
+  s1= qStringTerm() < EQ > s2 = qStringTerm() { return (s1.equalsIgnoreCase(s2));  }
+  | s1 = qStringTerm() < NEQ > s2 = qStringTerm() { return (!s1.equalsIgnoreCase(s2));  }
+  )
+}
+
+Double numericTerm() :
+{
+  Token t = null;
+  Token t2 = null;
+  Token t3 = null;
+
+  String value;
+  Double total = null;
+}
+{
+  (
+    (
+      t = < NUMBER >
+      {
+        System.out.print(t.image+" ");
+        return new Double(t.image);
+      }
+    )
+  |
+  (
+      t = < KEYSTRING >
+      {
+        value = values.get(t.image);
+        System.out.print(t.image+": "+value);
+        if(value == null || "null".equalsIgnoreCase(value) || value.length() <= 0)
+        	value = "0";
+        	
+        return new Double(value);
+      }
+    )
+  | 
+  (
+    <LP>
+      t = < NUMBER >  {total = new Double(t.image); System.out.print(t.image);}
+      <PLUS>
+      t2 = < NUMBER > {total += (new Double(t2.image)); System.out.print("+"+t2.image);}
+	(
+      <PLUS>
+      t3 = < NUMBER > {total += (new Double(t3.image)); System.out.print("+"+t3.image);}
+    )*
+    < RP >
+      {
+        //total = new Double(t.image)+new Double(t2.image);
+        System.out.print("="+total);
+        return total;
+      }
+    )
+  |
+  (
+    <LP>
+      t = < KEYSTRING > {total = new Double(values.get(t.image)); System.out.print(values.get(t.image)+"("+t.image+")");}
+       <PLUS>
+      t2 = < KEYSTRING > {total += (new Double(values.get(t2.image))); System.out.print("+"+values.get(t2.image)+"("+t2.image+")");}
+	(
+      <PLUS>
+      t3 = < KEYSTRING > {total += (new Double(values.get(t3.image))); System.out.print("+"+values.get(t3.image)+"("+t3.image+")");}
+    )*
+    < RP >
+      {
+        //System.out.print(values.get(t.image)+"+"+values.get(t2.image));
+        System.out.print("="+total);
+        return total;
+      }
+    )
+   |
+  (
+    <LP>
+      t = < NUMBER >
+      <MINUS>
+      t2 = < NUMBER >
+    < RP >
+      {
+        System.out.print(values.get(t.image)+"-"+values.get(t2.image));
+        return new Double(t.image)-new Double(t2.image);
+      }
+    )
+    |
+  (
+    <LP>
+      t = < KEYSTRING >
+      <MINUS>
+      t2 = < KEYSTRING >
+    < RP >
+      {
+        System.out.print(values.get(t.image)+"-"+values.get(t2.image));
+        return new Double(values.get(t.image))-new Double(values.get(t2.image));
+      }
+    )
+  | 
+  (
+    <LP>
+      t = < NUMBER >
+      <TIMES>
+      t2 = < NUMBER >
+    < RP >
+      {
+        System.out.print(t.image+"*"+t2.image);
+        return new Double(t.image)*new Double(t2.image);
+      }
+    )
+    |
+  (
+    <LP>
+      t = < KEYSTRING >
+      <TIMES>
+      t2 = < KEYSTRING >
+    < RP >
+      {
+        System.out.print(values.get(t.image)+"*"+values.get(t2.image));
+        return new Double(values.get(t.image))*new Double(values.get(t2.image));
+      }
+    )
+    |
+  (
+    <LP>
+      t = < NUMBER > 
+      <DIVIDE>
+      t2 = < NUMBER >
+    < RP >
+      {
+        System.out.print(t.image+"/"+t2.image);
+        return new Double(t.image)/new Double(t2.image);
+      }
+    )
+    |
+  (
+    <LP>
+      t = < KEYSTRING >
+      <DIVIDE>
+      t2 = < KEYSTRING >
+    < RP >
+      {
+        System.out.print(values.get(t.image)+"/"+values.get(t2.image));
+        return new Double(values.get(t.image))/new Double(values.get(t2.image));
+      }
+    )
+  )
+}
+
+
+Boolean booleanTerm() :
+{
+  Token t;
+  String value;
+  boolean boolExp;
+}
+{
+  (
+    (
+      t = < BOOL >
+      {
+        System.out.print(t.image+" ");
+        return new Boolean(t.image);
+      }
+    )
+    |
+  (
+      t = < KEYSTRING >
+      {
+        value = values.get(t.image);
+        System.out.print(t.image+": "+value);
+        return new Boolean(value);
+      }
+    )
+    |
+	< LP >
+	 boolExp = booleanExpression() {
+	   System.out.print(boolExp+"b ");
+	   return boolExp;
+	   }
+	< RP >
+  )
+}
+
+String qStringTerm() :
+{
+  Token t;
+  String value;
+}
+{
+  (
+    (
+      t = < QUOTED_STRING >
+      {
+        System.out.print(t.image+" "); 
+        return t.image;
+      }
+    )
+  |
+  (
+      t = < KEYSTRING >
+      {
+        value = values.get(t.image);
+        System.out.print(t.image+": "+value);
+        if(value == null)
+        	value = "null";
+        System.out.print("value: "+value);
+        return value;
+      }
+    )
+  )
+}

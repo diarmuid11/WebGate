@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+ <display-name>WebGateWeb</display-name>
+ <context-param>
+  <param-name>javax.faces.CONFIG_FILES</param-name>
+  <param-value>/WEB-INF/faces-config.xml</param-value>
+ </context-param>
+ <!-- <context-param> <description>Google Maps API key is required if gMap 
+		component is used. Sign up for an API key from http://code.google.com/apis/maps/signup.html</description> 
+		<param-name>com.icesoft.faces.gmapKey</param-name> <param-value>ABQIAAAADlu0ZiSTam64EKaCQr9eTRTOTuQNzJNXRlYRLknj4cQ89tFfpxTEqxQnVWL4k55OPICgF5_SOZE06A</param-value> 
+		</context-param> -->
+ <context-param>
+     <param-name>org.icefaces.ace.theme</param-name>
+     <param-value>rime</param-value>
+ </context-param>
+ <context-param>
+  <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+  <param-value>true</param-value>
+ </context-param>
+ <context-param>
+  <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+  <param-value>false</param-value>
+ </context-param>
+ <context-param>
+  <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+  <param-value>server</param-value>
+ </context-param>
+ <context-param>
+  <param-name>javax.faces.VALIDATE_EMPTY_FIELDS</param-name>
+  <param-value>false</param-value>
+ </context-param>
+ <!-- end opuentes 2012-03-22
+ start opuentes 2012-03-14 -->
+ <context-param>
+  <param-name>org.icefaces.blockUIOnSubmit</param-name>
+  <param-value>false</param-value>
+ </context-param>
+ <!-- start opuentes 2012-03-14 -->
+ <context-param>
+  <param-name>org.icefaces.connectionLostRedirectURI</param-name>
+  <param-value>/index.html</param-value>
+ </context-param>
+ <!-- end opuentes 2012-03-22-->
+ <context-param>
+  <param-name>org.icefaces.disableDefaultErrorPopups</param-name>
+  <param-value>true</param-value>
+ </context-param>
+ <context-param>
+  <param-name>org.icefaces.sessionExpiredRedirectURI</param-name>
+  <param-value>/index.html</param-value>
+ </context-param>
+ <!-- start opuentes 2012-03-25-->
+  <context-param>
+        <param-name>org.icefaces.replayNavigationOnReload</param-name>
+        <param-value>false</param-value>
+    </context-param>
+ <context-param>
+        <param-name>org.icefaces.deltaSubmit</param-name>
+        <param-value>false</param-value>
+    </context-param>
+ <context-param>  
+    <param-name>com.icesoft.faces.compressResources</param-name>  
+    <param-value>false</param-value>  
+</context-param>
+<context-param>
+        <param-name>org.icefaces.mandatoryResourceConfiguration</param-name>
+        <param-value>all</param-value>
+    </context-param>   
+ <!-- end opuentes 2012-03-25-->
+ <filter>
+  <filter-name>AuthorizationFilter</filter-name>
+  <filter-class>org.correlibre.qop.security.AuthorizationFilter</filter-class>
+  <init-param>
+   <param-name>error_page</param-name>
+   <param-value>/error.xhtml</param-value>
+  </init-param>
+  <init-param>
+   <param-name>session_page</param-name>
+   <param-value>/session.xhtml</param-value>
+  </init-param>
+ </filter>
+ <filter-mapping>
+  <filter-name>AuthorizationFilter</filter-name>
+  <url-pattern>/*</url-pattern>
+ </filter-mapping>
+ <servlet>
+  <servlet-name>Resource Servlet</servlet-name>
+  <servlet-class>com.icesoft.faces.webapp.CompatResourceServlet</servlet-class>
+  <load-on-startup>1</load-on-startup>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>Resource Servlet</servlet-name>
+  <url-pattern>/xmlhttp/*</url-pattern>
+ </servlet-mapping>
+ <!-- Session timeout -->
+ <session-config>
+  <session-timeout>90</session-timeout>
+ </session-config>
+ <welcome-file-list>
+  <welcome-file>/index.html</welcome-file>
+ </welcome-file-list>
+ <!-- Security constraints -->
+ <security-constraint>
+  <web-resource-collection>
+   <web-resource-name>User Authentication</web-resource-name>
+   <url-pattern>/*</url-pattern>
+  </web-resource-collection>
+  <auth-constraint>
+   <role-name>*</role-name>
+  </auth-constraint>
+ </security-constraint>
+ <security-constraint>
+  <web-resource-collection>
+   <web-resource-name>Admin Authentication</web-resource-name>
+   <url-pattern>/faces/admin/*</url-pattern>
+  </web-resource-collection>
+  <auth-constraint>
+   <role-name>ADMINISTRADOR</role-name>
+  </auth-constraint>
+ </security-constraint>
+ <!-- Form-Based Authentication -->
+ <login-config>
+  <auth-method>FORM</auth-method>
+  <realm-name>qop</realm-name>
+  <form-login-config>
+   <form-login-page>/login.xhtml</form-login-page>
+   <form-error-page>/error.xhtml</form-error-page>
+  </form-login-config>
+ </login-config>
+ <!-- Roles -->
+ <security-role>
+  <description>Usuario Administrador</description>
+  <role-name>ADMINISTRADOR</role-name>
+ </security-role>
+ <security-role>
+  <description>Usuario Encuestador</description>
+  <role-name>ENCUESTADOR</role-name>
+ </security-role>
+ <security-role>
+  <description>Usuario Encuestado (Fuente)</description>
+  <role-name>ENCUESTADO</role-name>
+ </security-role>
+</web-app>

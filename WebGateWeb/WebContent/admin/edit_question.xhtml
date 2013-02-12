@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	template="/layout/template.xhtml">
+	<ui:define name="pageTitle">
+		<h2>
+			<ice:outputText rendered="#{editQuestion.creating==true}"
+				value="Agregar nueva pregunta"></ice:outputText>
+			<ice:outputText rendered="#{editQuestion.creating==false}"
+				value="Editar pregunta"></ice:outputText>
+		</h2>
+	</ui:define>
+	<ui:define name="pageBody">
+
+		<ice:panelGrid columns="2" cellpadding="5">
+			<ice:outputLabel value="Formato" />
+			<ice:outputText value="#{editQuestion.question.surveyStructure.name}" />
+		</ice:panelGrid>
+		
+		<ice:panelGrid columns="1" cellpadding="5">
+			<ice:commandLink value="Ver formato" action="edit_survey_structure.xhtml" immediate="true">
+				<f:setPropertyActionListener target="#{flash.surveyStructure}"
+					value="#{editQuestion.surveyStructure}" />
+			</ice:commandLink>
+		</ice:panelGrid>
+
+		<h:panelGrid columns="2" border="0" cellpadding="5">
+			<ice:outputLabel value="Tipo de pregunta" />
+			<ice:panelGroup>
+				<ice:selectOneMenu partialSubmit="true" label="Tipo"
+					valueChangeListener="#{editQuestion.chooseQuestionType}"
+					value="#{editQuestion.questionTypeId}"
+					rendered="#{editQuestion.creating==true}">
+					<f:selectItems id="optionItem"
+						value="#{editQuestion.questionTypeItems}" />
+				</ice:selectOneMenu>
+				
+				<ice:outputText rendered="#{editQuestion.creating==false}"
+					value="#{editQuestion.question.questionType.name}" />
+			</ice:panelGroup>
+				
+			<ice:outputLabel value="Pregunta" />
+			 
+			<ice:inputText label="Pregunta" value="#{editQuestion.question.text}" size="40" required="true" requiredMessage="El texto de la pregunta es obligatorio"   />
+			 
+			 <!--
+			<ice:inputRichText value="#{editQuestion.question.text}" required="true" requiredMessage="El texto de la pregunta es obligatorio" height="20" toolbar="TOOL_BAR"
+                               customConfigPath="/js/config.js"
+                                language="es"
+                               skin="default" 
+                               saveOnSubmit="true"
+                               partialSubmit="true"
+                               rendered="true" />
+                               -->
+			
+			<ice:outputLabel value="Texto de ayuda" />
+			
+			
+			
+			<ice:inputText value="#{editQuestion.question.helpText}" size="40" />
+			
+			<ice:outputLabel value="Posición" />
+			<ice:outputText rendered="#{editQuestion.creating==false}"
+				value="#{editQuestion.question.ordinal}" />
+		</h:panelGrid>
+		<ui:include
+			src="#{editQuestion.question.questionType.creationViewComponent}">
+			<ui:param name="creationViewAdapter"
+				value="#{editQuestion.creationViewAdapter}" />
+		</ui:include>
+
+
+		<h:panelGrid columns="2" border="1" cellpadding="5" rendered="#{not empty editQuestion.validationTypeItems}">
+			<f:facet name="header">
+				<ice:outputText value="Tipo de validación" />
+				<ice:selectOneMenu label="Nueva Validación"
+					value="#{editQuestion.validationTypeId}"
+					rendered="#{not empty editQuestion.validationTypeItems}">
+					<f:selectItems value="#{editQuestion.validationTypeItems}" />
+				</ice:selectOneMenu>
+				<ice:commandButton
+					rendered="#{not empty editQuestion.validationTypeItems}"
+					actionListener="#{editQuestion.newValidation}"
+					value="Agregar validación" />
+				<br />
+			</f:facet>
+			
+			<ice:outputText value="No se han asignado validaciones"
+				rendered="#{empty editQuestion.validations}" />
+			<ice:dataTable value="#{editQuestion.validations}" var="validation"
+				rendered="#{not empty editQuestion.validations}">
+
+				<ice:column>
+					<f:facet name="header">
+						<ice:outputText value="Validación" />
+					</f:facet>
+					<ice:outputText value="#{validation.validationType.name}" />
+				</ice:column>
+
+				<ice:column>
+					<f:facet name="header">
+						<ice:outputText value="Clave" />
+					</f:facet>
+					<ice:outputText value="#{validation.key}" />
+				</ice:column>
+
+				<ice:column>
+					<f:facet name="header">
+						<ice:outputText value="Regla/Valor" />
+					</f:facet>
+					<ice:outputText value="#{validation.rule}" />
+				</ice:column>
+				<ice:column>
+					<f:facet name="header">
+						<ice:outputText value="Editar" />
+					</f:facet>
+					<ice:commandButton
+						actionListener="#{editQuestion.editValidation(validation)}"
+						value="Editar" />
+
+				</ice:column>
+			</ice:dataTable>
+
+			<h:panelGrid columns="1" border="1">
+				<ice:outputText rendered="#{editQuestion.editedValidation!=null}"
+					value="Editando validación #{editQuestion.editedValidation.key}" />
+				<ice:outputText rendered="#{editQuestion.editedValidation!=null}"
+					value="Ingrese valor para la regla" />
+				<ice:outputLabel value="Clave" rendered="#{editQuestion.editedValidation!=null}"/>
+				<ice:inputText label="Clave"
+					value="#{editQuestion.editedValidation.key}"
+					rendered="#{editQuestion.editedValidation!=null}" />
+					<ice:outputLabel value="Mensaje" rendered="#{editQuestion.editedValidation!=null}"/>
+				<ice:inputText label="Mensaje"
+					value="#{editQuestion.editedValidation.message}"
+					rendered="#{editQuestion.editedValidation!=null}" />
+
+				<ui:include
+					src="#{editQuestion.editedValidation.validationType.creationViewComponent}">
+					<ui:param name="validation"
+						value="#{editQuestion.editedValidation}" />
+					<ui:param name="creationViewAdapter"
+						value="#{editQuestion.editedValidation.creationViewAdapter}" />
+				</ui:include>
+
+				<ice:commandButton
+					actionListener="#{editQuestion.acceptValidationChanges}"
+					value="Actualizar"
+					rendered="#{editQuestion.editedValidation!=null}" />
+
+			</h:panelGrid>
+
+		</h:panelGrid>
+
+
+		<h:panelGrid columns="3" border="0" cellpadding="5">
+			<ice:commandButton value="&lt; Guardar y Anterior"
+				action="#{editQuestion.saveAndGoToPreviousQuestion}"
+				rendered="#{editQuestion.previousEnabled}" />
+			<ice:commandButton value="Guardar"
+				action="#{editQuestion.justSaveQuestion}" />
+			<ice:commandButton value="Guardar y Siguiente &gt;"
+				action="#{editQuestion.saveAndGoToNextQuestion}"
+				rendered="#{editQuestion.nextEnabled}" />
+			<ice:commandButton value="Guardar y Crear Nueva &gt;"
+				action="#{editQuestion.saveAndGoToNextQuestion}"
+				rendered="#{editQuestion.newEnabled}" />
+		</h:panelGrid>
+
+		<h:panelGrid columns="2" border="0" cellpadding="5">
+			<ice:commandButton value="&lt; Anterior"
+				action="#{editQuestion.goToPreviousQuestion}"
+				rendered="#{editQuestion.previousEnabled}" />
+			<ice:commandButton value="Siguiente &gt;"
+				action="#{editQuestion.goToNextQuestion}"
+				rendered="#{editQuestion.nextEnabled}" />
+		</h:panelGrid>
+
+	</ui:define>
+</ui:composition>

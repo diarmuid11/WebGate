@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:ace="http://www.icefaces.org/icefaces/components"
+    template="/layout/template.xhtml"
+	>
+	<ui:define name="pageTitle">
+		<ice:outputText value="Asignación de encuestas" id="title"></ice:outputText>
+	</ui:define>
+		
+	<ui:define name="pageBody" >
+	
+		<ice:dataTable id="surveyStructures" var="ss" value="#{assignSurveys.surveyStructures}" >
+            <ice:column id="id">
+                <f:facet name="header" id="hid">
+                        <ice:outputText value="Id"/>
+                </f:facet>
+                <ice:outputText value="#{ss.id}" id="ssId"/>
+            </ice:column>            
+            <ice:column id="name">
+                <f:facet name="header">
+                        <ice:outputText value="Encuesta" id="hEn"/>
+                </f:facet>
+                <ice:outputText value="#{ss.name}" id="ssName"/>
+            </ice:column>
+            <ice:column id="creation">
+	            <f:facet name="header">
+	            	<ice:outputText value="Creación" id="hAcc"/>
+	            </f:facet>
+					<ice:selectManyListbox value="#{ss.creatorUsers}" partialSubmit="true" id="users" size="8">
+						<f:selectItems id="optionItem" value="#{assignSurveys.creatorUserItems}"/>
+					</ice:selectManyListbox>
+					<br/>
+					<ice:commandButton actionListener="#{assignSurveys.assignCreators}" value="Permitir creación"
+							action="assign_surveys.xhtml">
+                		<f:attribute name="surveyStructure" value="#{ss}" />
+                	</ice:commandButton>
+            </ice:column>
+            <ice:column id="instances">
+	            <f:facet name="header">
+	            	<ice:outputText value="Instancias"/>
+	            </f:facet>
+	            <h:commandLink action="assign_instances.xhtml" value="Asignar instancias">
+                	<f:param name="surveyStructureId" value="#{ss.id}"/> 
+                </h:commandLink>				            		               
+            </ice:column>
+        </ice:dataTable>		
+	</ui:define>		
+</ui:composition>	

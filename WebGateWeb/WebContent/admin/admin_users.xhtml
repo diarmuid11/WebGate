@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:ace="http://www.icefaces.org/icefaces/components"
+    template="/layout/template.xhtml"
+	>
+	<ui:define name="pageTitle">
+	<h2>
+		<ice:outputText value="Administración de usuarios"></ice:outputText>
+		</h2>
+		<br/>
+	</ui:define>		
+	<ui:define name="pageBody" >	
+		
+		<h:panelGrid columns="5" border="0">
+			<ice:outputLabel for="Usuario" value="Usuario"></ice:outputLabel>
+			<ice:inputText label="Usuario" value="#{adminUsers.userName}" tabindex="1" ></ice:inputText>
+			<ice:outputLabel for="Rol" value="Rol"></ice:outputLabel>			
+			<ice:selectOneMenu value="#{adminUsers.selectedRole}" layout="inline" tabindex="2">
+				<f:selectItem id="r1" itemLabel="Todos" itemValue=""/>
+			    <f:selectItem id="r2" itemLabel="Administrador" itemValue="ADMINISTRADOR" />
+				<f:selectItem id="r3" itemLabel="Encuestador" itemValue="ENCUESTADOR" />
+				<f:selectItem id="r4" itemLabel="Encuestado (Fuente)" itemValue="ENCUESTADO" />				
+			</ice:selectOneMenu>
+			<ice:commandButton value="Buscar" action="#{adminUsers.find}" tabindex="3"/>
+		</h:panelGrid>
+		<br/>
+		<ice:dataTable border="1" id="users" value="#{adminUsers.users}" var="u" title="Usuarios encontrados" cellpadding="5px">
+			<ice:column id="usruario">
+				<f:facet name="header">
+					<ice:outputText value="Usuario"></ice:outputText>
+				</f:facet>
+				
+				<ice:commandLink value="#{u}" action="user_info.xhtml">
+                	<f:param name="userName" value="#{u}"/> 
+                </ice:commandLink>			
+			</ice:column>
+			<ice:column id="acciones">
+				<f:facet name="header">
+					<ice:outputText value="Acciones"></ice:outputText>					
+				</f:facet>
+				
+					<ice:commandLink value="Editar " action="edit_user.xhtml">
+						<f:param name="userName" value="#{u}"/> 
+					</ice:commandLink>
+					
+					<ice:commandLink value=" Eliminar" actionListener="#{adminUsers.delete}">
+						<f:attribute name="userName" value="#{u}"/>
+					</ice:commandLink>
+				
+			</ice:column>
+		</ice:dataTable>
+	</ui:define>		
+</ui:composition>	

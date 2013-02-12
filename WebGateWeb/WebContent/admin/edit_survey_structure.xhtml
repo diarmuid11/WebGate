@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	template="/layout/template.xhtml">
+	<ui:define name="pageTitle">
+		<h1>
+			<ice:outputText value="Editar Formato"/>
+		</h1>
+	</ui:define>
+
+	<ui:define name="pageBody">
+		<h:panelGrid columns="2">
+			
+			<ice:outputLabel
+				value="Formato" />
+			<ice:outputText
+				value="#{editSurveyStructure.surveyStructure.name}" />
+			
+			<br/>
+		</h:panelGrid>
+		<ice:commandLink value="Ver listado de formatos" action="admin_survey_structures.xhtml"/>
+		<br/>
+		<br/>
+		<ice:commandButton value="Nueva Pregunta" action="edit_question" rendered="#{editSurveyStructure.creating or editSurveyStructure.inEdition}">
+		    <f:setPropertyActionListener target="#{flash.surveyStructure}" value="#{editSurveyStructure.surveyStructure}" />
+		</ice:commandButton>
+			<br/>
+		<ice:dataTable var="question" value="#{editSurveyStructure.questions}"
+			cellpadding="5">
+			<ice:column>
+				<f:facet name="header">
+					<ice:outputText value="Id" />
+				</f:facet>
+				<ice:outputText value="#{question.id}" />
+			</ice:column>
+			<ice:column>
+				<f:facet name="header">
+					<ice:outputText value="Clave" />
+				</f:facet>
+				<ice:outputText value="#{question.key}" />
+			</ice:column>
+			<!-- 
+			<ice:column>
+				<f:facet name="header">
+					<ice:outputText value="Nombre" />
+				</f:facet>
+				<ice:outputText value="#{question.name}" />
+			</ice:column>
+			 -->
+			<ice:column>
+				<f:facet name="header">
+					<ice:outputText value="Tipo" />
+				</f:facet>
+				<ice:outputText value="#{question.questionType.name}" />
+			</ice:column>
+			<ice:column>
+				<f:facet name="header">
+					<ice:outputText value="Texto" />
+				</f:facet>
+				<ice:outputText value="#{question.text}" escape="false" />
+			</ice:column>
+
+			<ice:column rendered="#{editSurveyStructure.inEdition or editSurveyStructure.creating}">
+				<f:facet name="header">
+					<ice:outputText value="Editar" />
+				</f:facet>
+				<ice:commandButton action="edit_question" value="Editar">
+					<f:setPropertyActionListener target="#{flash.questionToEdit}"
+						value="#{question}" />
+					<f:setPropertyActionListener target="#{flash.surveyStructure}"
+						value="#{editSurveyStructure.surveyStructure}" />
+				</ice:commandButton>
+			</ice:column>
+			<ice:column rendered="#{editSurveyStructure.inEdition or editSurveyStructure.creating}">
+				<f:facet name="header">
+					<ice:outputText value="Ordenar" />
+				</f:facet>
+				<ice:panelGrid columns="2">
+					<ice:commandLink actionListener="#{editSurveyStructure.goUp}" 
+						value=""  title="Subir">
+						<ice:graphicImage url="/img/go-up.png" rendered="#{question.ordinal > 1}" />
+						<f:attribute name="question" value="#{question}" />
+					</ice:commandLink>
+					<ice:commandLink actionListener="#{editSurveyStructure.goDown}"
+						value="" title="Bajar">
+						<ice:graphicImage url="/img/go-down.png" rendered="#{question.ordinal != editSurveyStructure.sizeQuestions}" />
+						<f:attribute name="question" value="#{question}" />
+					</ice:commandLink>
+				</ice:panelGrid>
+			</ice:column>
+
+		</ice:dataTable>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:ace="http://www.icefaces.org/icefaces/components"
+    template="/layout/template.xhtml"
+	>
+	<ui:define name="pageTitle">
+		<h2>
+        	<h:outputText value="Bienvenid@"/>
+        	<br/>
+        	<h:outputText value="#{sessionBean.completeNameUser}"/>
+		</h2>              
+     </ui:define>
+
+     <ui:define name="pageBody">
+			<br/>     
+			<ice:outputText value="No tiene encuestas pendientes" rendered="#{empty showBasicSurveys.surveys}" renderedOnUserRole="ENCUESTADO,ENCUESTADOR"/>
+			<ice:panelGroup renderedOnUserRole="ENCUESTADO,ENCUESTADOR,ADMINISTRADOR">
+     		<ice:dataPaginator for="surveyInstancesTable" id="pgt1" paginator="true" fastStep="5" paginatorMaxPages="5" rowsCountVar="rowsCount" displayedRowsCountVar="displayedRowsCount" firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex" pageCountVar="pageCount" pageIndexVar="pageIndex" rendered="#{not empty showBasicSurveys.surveys}" >	
+            	
+            <ice:outputFormat styleClass="standard" value="{0} encuestas encontradas. Pag {4} de {5}.">
+	            <f:param value="#{rowsCount}"/>
+	            <f:param value="#{displayedRowsCount}"/>
+	            <f:param value="#{firstRowIndex}"/>
+	            <f:param value="#{lastRowIndex}"/>
+	            <f:param value="#{pageIndex}"/>
+	            <f:param value="#{pageCount}"/>
+       	 	</ice:outputFormat>
+		<f:facet name="first">
+				<ice:graphicImage style="border:none;" id="img1" url="/xmlhttp/css/rime/css-images/arrow-first.gif"/>
+			</f:facet>
+			<f:facet name="last">
+				<ice:graphicImage style="border:none;" id="img2" url="/xmlhttp/css/rime/css-images/arrow-last.gif"/>
+			</f:facet>
+			<f:facet name="previous">
+				<ice:graphicImage style="border:none;" id="img3" url="/xmlhttp/css/rime/css-images/arrow-previous.gif"/>
+			</f:facet>
+			<f:facet name="next">
+				<ice:graphicImage style="border:none;" id="img4" url="/xmlhttp/css/rime/css-images/arrow-next.gif"/>
+			</f:facet>
+			<f:facet name="fastforward">
+				<ice:graphicImage style="border:none;" id="img5" url="/xmlhttp/css/rime/css-images/arrow-ff.gif"/>
+			</f:facet>
+			<f:facet name="fastrewind">
+				<ice:graphicImage style="border:none;" id="img6" url="/xmlhttp/css/rime/css-images/arrow-fr.gif"/>
+			</f:facet>
+		</ice:dataPaginator>
+		<ice:dataTable id="surveyInstancesTable" var="survey" value="#{showBasicSurveys.surveys}" rows="20" cellpadding="5" rendered="#{not empty showBasicSurveys.surveys}">
+            <!-- 
+            <ice:column id="surveyId">
+                <f:facet name="header">
+        				<ice:outputText value="#"/>
+                </f:facet>
+                <ice:outputText value="#{survey.id}"/>
+            </ice:column>
+             -->
+            <ice:column id="surveyStructure">
+                <f:facet name="header">
+                	<ice:commandSortHeader columnName="" disabled="true" arrow="true">
+        				<ice:outputText value="Modulo"/>
+      				</ice:commandSortHeader>
+                </f:facet>
+                <ice:outputText value="#{survey.surveyStructure.name}"/>
+            </ice:column>
+            <!-- 
+            <ice:column id="surveyState">
+                <f:facet name="header">
+                    <ice:commandSortHeader columnName="Estado" disabled="true" arrow="true">
+        				<ice:outputText value="Estado"/>
+      				</ice:commandSortHeader>
+                </f:facet>
+                <ice:outputText value="#{survey.surveyState.name}"/>
+            </ice:column>
+             -->
+            <ice:column id="referenceTime" renderedOnUserRole="ENCUESTADO">
+                <f:facet name="header">
+                        <ice:outputText value="Periodo de referencia"/>
+                </f:facet>
+                <ice:outputText value="#{showBasicSurveys.getReferenceTime(survey)}" escape="false"/>
+            </ice:column>
+            <ice:column id="feedRate">
+                <f:facet name="header">
+                        <ice:outputText value="Porcentaje de diligenciamiento"/>
+                </f:facet>
+                <ice:outputText value="#{showBasicSurveys.getFeedRate(survey)}" escape="false"/>
+            </ice:column>
+            <!-- 
+            <ice:column id="currentQuestion">
+                <f:facet name="header">
+                        <ice:outputText value="Pregunta actual"/>
+                </f:facet>
+                <ice:outputText value="#{survey.currentQuestion.text}" escape="false"/>
+            </ice:column>
+             -->
+            <ice:column id="surveyLink">
+                <f:facet name="header">
+                        <ice:outputText value="Acción"/>
+                </f:facet>
+                <ice:commandLink action="fill_survey.xhtml" value="Completar" rendered="#{showBasicSurveys.isFillingState(survey.surveyState) or showBasicSurveys.isNewState(survey.surveyState)}">
+                	<f:param name="surveyId" value="#{survey.id}"/> 
+                </ice:commandLink>
+                <ice:commandLink action="fill_survey.xhtml" value="Ver" rendered="#{showBasicSurveys.isEndedState(survey.surveyState)}">
+                	<f:param name="surveyId" value="#{survey.id}"/> 
+                </ice:commandLink>
+            </ice:column>
+        </ice:dataTable>
+     </ice:panelGroup>
+
+     </ui:define>
+</ui:composition>

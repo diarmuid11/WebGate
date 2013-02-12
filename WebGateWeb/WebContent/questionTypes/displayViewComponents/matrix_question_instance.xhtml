@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+Oscar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:ace="http://www.icefaces.org/icefaces/components">
+                           
+	<ice:panelGrid>
+			<f:facet name="header">
+				<ice:outputText value="" />
+			</f:facet>
+			<ice:dataTable value="#{fillViewAdapter.rowOptions1}" var="rowOption">
+				<ice:column>
+					<f:facet name="header">
+						<ice:outputText value="#{fillViewAdapter.questionName}" />
+					</f:facet>
+					<ice:panelGroup panelTooltip="helpText" rendered="#{not empty rowOption.helpText}">
+						<ice:panelGrid columns="2">
+							<ice:graphicImage url="/img/help.png" />
+							<ice:outputText value="#{rowOption.text}" escape="false" />
+						</ice:panelGrid>
+					</ice:panelGroup>
+					<ice:outputText value="#{rowOption.text}" escape="false" rendered="#{empty rowOption.helpText}" />
+					 
+					<ice:panelTooltip id="helpText"
+                              style="width: 300px;"
+                              displayOn="hover"
+                              hoverDelay="250">
+		                <f:facet name="body">
+		                <ice:outputText value="#{rowOption.helpText}" escape="false" />
+		                </f:facet>
+		            </ice:panelTooltip>
+				</ice:column>
+			
+				<ice:column>
+					<f:facet name="header">
+						<ice:outputText value="#{fillViewAdapter.rowListQuestion1.text}" />
+					</f:facet>
+					<ice:inputText id="mainQuestion" label="#{fillViewAdapter.rowListQuestion1.text} - #{rowOption.text}" value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion1]}" 
+					  rendered="#{fillViewAdapter.questionType1 eq '8'}" size="18" tabindex="1">
+						<f:validateDoubleRange/>
+					</ice:inputText>
+					<ice:inputText value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion1]}"   
+					rendered="#{fillViewAdapter.questionType1 eq '1'}" size="40" tabindex="1" />
+					<ice:inputTextarea  value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion1]}"  
+					rendered="#{fillViewAdapter.questionType1 eq '16'}" cols="20" tabindex="1" />				
+				</ice:column>
+			
+				<ice:column rendered="#{fillViewAdapter.activeRowListQuestion2}">
+					<f:facet name="header">
+						<ice:outputText value="#{fillViewAdapter.rowListQuestion2.text}" />
+					</f:facet>
+					<ice:inputText label="#{fillViewAdapter.rowListQuestion2.text} - #{rowOption.text}" value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion2]}" 
+					rendered="#{fillViewAdapter.questionType2 eq '8'}" size="18" tabindex="1">
+						<f:validateDoubleRange/>
+					</ice:inputText>
+					<ice:inputText value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion2]}" rendered="#{fillViewAdapter.questionType2 eq '1'}" size="40" tabindex="1"/>
+					<ice:inputTextarea value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion2]}"  rendered="#{fillViewAdapter.questionType2 eq '16'}" cols="20" tabindex="1" />				
+				</ice:column>
+			
+				<ice:column rendered="#{fillViewAdapter.activeRowListQuestion3}">
+					<f:facet name="header">
+						<ice:outputText value="#{fillViewAdapter.rowListQuestion3.text}" />
+					</f:facet>
+					<ice:inputText label="#{fillViewAdapter.rowListQuestion3.text} - #{rowOption.text}" value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion3]}" rendered="#{fillViewAdapter.questionType3 eq '8'}" size="18" tabindex="1" >
+						<f:validateDoubleRange/>
+					</ice:inputText>
+					<ice:inputText value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion3]}" rendered="#{fillViewAdapter.questionType3 eq '1'}" size="40" tabindex="1"/>
+					<ice:inputTextarea value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion3]}"  rendered="#{fillViewAdapter.questionType3 eq '16'}" cols="20"  tabindex="1"/>				
+				</ice:column>
+				
+				<ice:column rendered="#{fillViewAdapter.activeRowListQuestion4}">
+					<f:facet name="header">
+						<ice:outputText value="#{fillViewAdapter.rowListQuestion4.text}" />
+					</f:facet>
+					<ice:inputText label="#{fillViewAdapter.rowListQuestion4.text} - #{rowOption.text}" value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion4]}" rendered="#{fillViewAdapter.questionType4 eq '8'}" size="18" tabindex="1" >
+						<f:validateDoubleRange/>
+					</ice:inputText>
+					<ice:inputText value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion4]}" rendered="#{fillViewAdapter.questionType4 eq '1'}" size="40" tabindex="1"/>
+					<ice:inputTextarea value="#{fillViewAdapter.selectedItems[rowOption][fillViewAdapter.rowListQuestion4]}"  rendered="#{fillViewAdapter.questionType4 eq '16'}" cols="20" tabindex="1" />				
+				</ice:column>
+			</ice:dataTable>
+		</ice:panelGrid>
+		<ice:panelGrid rendered="#{not empty fillViewAdapter.paragraphQuestion}" columns="1">
+			<ice:outputText value="#{fillViewAdapter.paragraphQuestion.text}" escape="false"  />
+			<ice:inputTextarea value="#{fillViewAdapter.paragraphAnswer}"  rows="5" cols="150" tabindex="1" />
+		</ice:panelGrid>
+</ui:composition>

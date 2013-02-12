@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sun-application>
+	<security-role-mapping>
+		<role-name>ADMINISTRADOR</role-name>
+		<group-name>ADMINISTRADOR</group-name>
+	</security-role-mapping>
+
+	<security-role-mapping>
+		<role-name>ENCUESTADOR</role-name>
+		<group-name>ENCUESTADOR</group-name>
+	</security-role-mapping>
+
+	<security-role-mapping>
+		<role-name>ENCUESTADO</role-name>
+		<group-name>ENCUESTADO</group-name>
+	</security-role-mapping>
+	<realm>qop</realm>
+</sun-application>

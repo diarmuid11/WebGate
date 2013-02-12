@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="WebGateEJB">
+		<jta-data-source>jdbc/qop</jta-data-source>
+		<class>org.correlibre.qop.domain.ValidationType</class>
+		<class>org.correlibre.qop.domain.Validation</class>
+		<class>org.correlibre.qop.domain.User</class>
+		<class>org.correlibre.qop.domain.TimeAwareEntity</class>
+		<class>org.correlibre.qop.domain.SurveyStructure</class>
+		<class>org.correlibre.qop.domain.Survey</class>
+		<class>org.correlibre.qop.domain.QuestionType</class>
+		<class>org.correlibre.qop.domain.Question</class>
+		<class>org.correlibre.qop.domain.Option</class>
+		<class>org.correlibre.qop.domain.Jump</class>
+		<class>org.correlibre.qop.domain.Answer</class>
+		<class>org.correlibre.qop.domain.CategoryDomain</class>
+		<class>org.correlibre.qop.domain.CategoryOption</class>
+		<class>org.correlibre.qop.domain.ConfigProperty</class>
+		<properties>
+			<property name="eclipselink.logging.level" value="INFO"/>
+		</properties>
+	</persistence-unit>
+</persistence>

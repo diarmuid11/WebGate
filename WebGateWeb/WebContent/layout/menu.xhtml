@@ -1,0 +1,81 @@
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:ace="http://www.icefaces.org/icefaces/components">
+    
+  
+<ice:menuBar orientation="Horizontal"  xmlns:ice="http://www.icesoft.com/icefaces/component">
+	<ice:menuItem value="Inicio"  action="/main.xhtml" id="main"/>
+	<ice:menuItem value="Encuestas" id="srv" renderedOnUserRole="ADMINISTRADOR,ENCUESTADOR">
+		<ice:menuItem value="Encuestas"  action="/show_surveys.xhtml" id="showSurveys"/>
+		<ice:menuItem value="Formatos"  action="/show_survey_structures.xhtml" id="showStructures"/>		
+	</ice:menuItem>
+	<ice:menuItem value="Reportes" id="reports" renderedOnUserRole="ADMINISTRADOR">
+		<ice:menuItem value="Total consolidado"  action="/main.xhtml" id="total" style="width: 200px"/>
+		<ice:menuItem value="Cuadros operativos"  action="/main.xhtml" id="operative" style="width: 200px"/>
+	</ice:menuItem>
+	<ice:menuItem value="Administración"  id="adm" renderedOnUserRole="ADMINISTRADOR">
+		<ice:menuItem value="Administrar Formatos" action="/admin/admin_survey_structures.xhtml" style="width: 230px"  />
+		<ice:menuItem value="Ver Formatos asociados" action="/admin/admin_associated_survey_structures.xhtml" style="width: 230px"  />
+		<ice:menuItem value="Asignar encuestas" action="/admin/assign_surveys.xhtml" id="asignar" style="width: 230px" />
+		<ice:menuItem value="Usuarios" action="/admin/admin_users.xhtml" id="usrAdm" style="width: 230px"/>
+		<ice:menuItem value="Crear Usuarios" action="/admin/create_users.xhtml" id="usr"  style="width: 230px"/>
+	</ice:menuItem>
+	<ice:menuItem value="Descargas" id="downloads" renderedOnUserRole="ENCUESTADO">
+		<ice:menuItem value="Manual de diligenciamiento"  link="resources/1.pdf" id="man" style="width: 250px" target="_blank" styleClass="iceOutTxt" />
+		<ice:menuItem value="Documento de Metodología"  link="resources/2.pdf" id="man2" style="width: 250px" target="_blank" styleClass="iceOutTxt" />
+		<!-- 
+		<ice:menuItem value="Manual de usuario Encuestado"  link="resources/2.pdf" id="man2" style="width: 250px" target="_blank" styleClass="iceOutTxt" />
+		<ice:menuItem value="Formulario"  link="resources/3.pdf" id="form" style="width: 250px" target="_blank" styleClass="iceOutTxt" />
+		 -->
+		<ice:menuItem value="Paz y salvos"  action="/show_goodstanding_surveys.xhtml" id="safe" style="width: 250px"/>
+	</ice:menuItem>
+	<ice:menuItem value="Sesión" id="ses">
+		<ice:menuItem value="Modificar contraseña" action="/modify_password.xhtml" id="chgPass" style="width: 200px"/>
+		<ice:menuItem value="Cerrar sesión" action="#{sessionBean.closeSession}" id="close" style="width: 200px"/>
+	</ice:menuItem>		
+</ice:menuBar>
+ 
+ <!-- 
+	<ace:menuBar id="menuBar"
+	       autoSubmenuDisplay="true"
+	       effect="Slide"
+	       effectDuration="400" >
+	                        
+		<ace:menuItem value="Inicio" action="/main.xhtml" icon="ui-icon ui-icon-home" />     
+		
+		<ace:submenu label="Encuestas" rendered="#{sessionBean.admin or sessionBean.surveyor}" >  
+		      <ace:menuItem value="Encuestas" action="/show_surveys.xhtml"/>
+		      <ace:menuItem value="Formatos"  action="/show_survey_structures.xhtml"/>
+		</ace:submenu>
+		
+		<ace:submenu label="Sesión" id="ses">
+			<ace:menuItem value="Modificar contraseña" action="/modify_password.xhtml" />
+			<ace:menuItem value="Cerrar sesión" action="#{sessionBean.closeSession}" />
+		</ace:submenu>
+	                        
+	</ace:menuBar>
+	-->
+</ui:composition>						

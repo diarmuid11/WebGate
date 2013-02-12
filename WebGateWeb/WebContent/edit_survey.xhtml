@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:ace="http://www.icefaces.org/icefaces/components"
+    template="/layout/template.xhtml"
+	>
+	<ui:define name="pageTitle">
+	<h1>
+		<ice:outputText value="Editar encuesta"/>
+	</h1>
+	</ui:define>
+	
+	<ui:define name="pageBody">
+	
+		<ice:panelGrid columns="2" cellpadding="6">
+			<ice:outputLabel value="Encuesta" />
+			<ice:outputText value="#{editSurvey.survey.surveyStructure.name}" />
+		</ice:panelGrid>
+		
+		<ice:commandLink id="list2" action="show_surveys" value="Ver el listado de encuestas madre" rendered="#{empty editSurvey.survey.parentSurvey}" >
+				<f:param name="surveyStructureId" value="#{editSurvey.survey.surveyStructure.id}" />
+				<f:param name="surveyId" value="#{editSurvey.survey.id}" />
+		</ice:commandLink>
+		<br/>
+		<ice:commandLink action="show_children_surveys.xhtml" value="Ver listado de encuestas" rendered="#{not empty editSurvey.survey.parentSurvey}">
+       		<f:param name="parentSurveyId" value="#{editSurvey.survey.parentSurvey.id}"/>
+           <f:param name="surveyStructureId" value="#{editSurvey.survey.surveyStructure.id}"/>
+        </ice:commandLink>
+		
+	
+		<ice:panelGrid columns="2">
+			
+			<ice:outputLabel value="Encuestador" />
+			<ice:selectOneMenu value="#{editSurvey.userLogin}">
+				<f:selectItems value="#{editSurvey.userListItems}"/>
+			</ice:selectOneMenu>
+			
+			<ice:outputLabel value="Estado" />
+			<ice:selectOneMenu value="#{editSurvey.surveyStateValue}">
+				<f:selectItems value="#{editSurvey.surveyStateListItems}"/>
+			</ice:selectOneMenu>
+			
+			<ice:outputLabel value="Periodo de referencia" />
+			
+			 <ace:dateTimeEntry 
+			 	id="cal"
+			 	styleClass="dateEntryText"
+                value="#{editSurvey.referenceTime}"
+                navigator="true" />
+			
+			<!-- 
+			<ice:selectInputDate value="#{editSurvey.referenceTime}" 
+			required="true" 
+			requiredMessage="La fecha para el periodo de referencia es obligatoria"
+			renderAsPopup="true"  />
+			 -->
+			 
+			<ice:outputLabel value="Pregunta actual" />
+			<ice:selectOneMenu value="#{editSurvey.questionId}">
+				<f:selectItem itemValue="" itemLabel="Ninguna" />
+				<f:selectItems value="#{editSurvey.questionListItems}"  />
+			</ice:selectOneMenu>
+		
+		</ice:panelGrid>
+		
+		<ice:commandButton value="Actualizar" actionListener="#{editSurvey.update}" />
+
+	</ui:define>
+</ui:composition>

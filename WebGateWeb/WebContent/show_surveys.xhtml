@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:ace="http://www.icefaces.org/icefaces/components"
+    template="/layout/template.xhtml"
+	>
+	<ui:define name="pageTitle">
+	<h1>
+		<ice:outputText value="Encuestas"/>
+	</h1>
+	</ui:define>
+	
+	<ui:define name="pageBody">
+	<ice:panelGrid columns="5">
+		<ice:outputLabel value="Encuesta" />
+		<ice:selectOneMenu value="#{showSurveys.searchSurveyStructureId}" partialSubmit="true" valueChangeListener="#{showSurveys.changeSearchSurveyStructure}">
+			<f:selectItems value="#{showSurveys.surveyStructureItems}"/>
+		</ice:selectOneMenu>
+		
+		<ice:outputLabel value="Estado" />
+		<ice:selectOneMenu value="#{showSurveys.surveyState}" partialSubmit="true">
+			<f:selectItem itemValue="" itemLabel="Todos" />
+			<f:selectItems value="#{showSurveys.surveyStateItems}"/>
+		</ice:selectOneMenu>
+		
+		<ice:commandButton value="Buscar" actionListener="#{showSurveys.searchSurveys}"/>
+		
+		<ice:outputLabel value="#{showSurveys.identityQuestionText}" rendered="#{showSurveys.hasIdentifyQuestion}" />
+		<ice:inputText value="#{showSurveys.identityQuestionSearchText}" rendered="#{showSurveys.hasIdentifyQuestion}" />
+	</ice:panelGrid>	
+	<ice:panelGrid columns="3">	
+		<ice:commandLink action="#{showSurveys.createAndEditSurvey(showSurveys.searchSurveyStructureId, sessionBean.currentUser)}" value="Crear" disabled="#{empty showSurveys.parentSurveyStructure}" renderedOnUserRole="ADMINISTRADOR" />
+		<ice:commandLink action="fill_survey.xhtml" value="Iniciar">
+			<f:param name="surveyStructureId" value="#{showSurveys.searchSurveyStructureId}" id="p1" />
+		</ice:commandLink>
+		
+	</ice:panelGrid>	
+	<ice:panelGrid columns="2">	
+		
+		</ice:panelGrid>
+		<br/>
+		<br/>
+		<!-- 
+		<ice:dataPaginator for="surveyInstancesTable" id="pgt1"
+			paginator="true" fastStep="5" paginatorMaxPages="5"
+			rowsCountVar="rowsCount"
+            displayedRowsCountVar="displayedRowsCount"
+            firstRowIndexVar="firstRowIndex"
+            lastRowIndexVar="lastRowIndex"
+            pageCountVar="pageCount"
+            pageIndexVar="pageIndex">	
+            	
+            <ice:outputFormat
+                styleClass="standard"
+                value="{0} encuestas encontradas. Pag {4} de {5}.">
+            <f:param value="#{rowsCount}"/>
+            <f:param value="#{displayedRowsCount}"/>
+            <f:param value="#{firstRowIndex}"/>
+            <f:param value="#{lastRowIndex}"/>
+            <f:param value="#{pageIndex}"/>
+            <f:param value="#{pageCount}"/>
+        </ice:outputFormat>
+		<f:facet name="first">
+				<ice:graphicImage style="border:none;" id="img1"
+					url="/xmlhttp/css/rime/css-images/arrow-first.gif"></ice:graphicImage>
+			</f:facet>
+			<f:facet name="last">
+				<ice:graphicImage style="border:none;" id="img2"
+					url="/xmlhttp/css/rime/css-images/arrow-last.gif"></ice:graphicImage>
+			</f:facet>
+			<f:facet name="previous">
+				<ice:graphicImage style="border:none;" id="img3"
+					url="/xmlhttp/css/rime/css-images/arrow-previous.gif"></ice:graphicImage>
+			</f:facet>
+			<f:facet name="next">
+				<ice:graphicImage style="border:none;" id="img4"
+					url="/xmlhttp/css/rime/css-images/arrow-next.gif"></ice:graphicImage>
+			</f:facet>
+			<f:facet name="fastforward">
+				<ice:graphicImage style="border:none;" id="img5"
+					url="/xmlhttp/css/rime/css-images/arrow-ff.gif"></ice:graphicImage>
+			</f:facet>
+			<f:facet name="fastrewind">
+				<ice:graphicImage style="border:none;" id="img6"
+					url="/xmlhttp/css/rime/css-images/arrow-fr.gif"></ice:graphicImage>
+			</f:facet>
+		</ice:dataPaginator>
+		<ice:dataTable id="surveyInstancesTable" var="survey" value="#{showSurveys.surveys}"
+			rows="20" cellpadding="4px">
+            <ice:column id="surveyId">
+                <f:facet name="header">
+                	<ice:commandSortHeader columnName="" disabled="false" arrow="true">
+        				<ice:outputText value="#" />
+      				</ice:commandSortHeader>
+                </f:facet>
+                <ice:outputText value="#{survey.id}"/>
+            </ice:column>
+            <ice:column id="surveyStructure">
+                <f:facet name="header">
+                	<ice:commandSortHeader columnName="" disabled="true" arrow="true">
+        				<ice:outputText value="Encuesta" />
+      				</ice:commandSortHeader>
+                </f:facet>
+                <ice:outputText value="#{survey.surveyStructure.name}"/>
+            </ice:column>
+            -->
+            <!-- 
+            <ice:column id="surveyUser">
+                <f:facet name="header">
+                   <ice:commandSortHeader columnName="Usuario" disabled="true" arrow="true">
+        				<ice:outputText value="Usuario"/>
+      				</ice:commandSortHeader>
+                </f:facet>
+                <ice:outputText value="#{survey.userLogin}"/>
+            </ice:column>
+             
+            <ice:column id="surveyState">
+                <f:facet name="header">
+                    <ice:commandSortHeader columnName="Estado" disabled="true" arrow="true">
+        				<ice:outputText value="Estado"/>
+      				</ice:commandSortHeader>
+                </f:facet>
+                <ice:outputText value="#{survey.surveyState.name}"/>
+            </ice:column>
+            <ice:column id="user" renderedOnUserRole="ADMINISTRADOR">
+                <f:facet name="header">
+                    <ice:commandSortHeader columnName="Usuario" disabled="true" arrow="true">
+        				<ice:outputText value="Usuario"/>
+      				</ice:commandSortHeader>
+                </f:facet>
+                <ice:outputText value="#{survey.userLogin}"/>
+            </ice:column>
+            -->
+            <!-- 
+            <ice:column id="firstQuestion">
+                <f:facet name="header">
+                    <ice:commandSortHeader columnName="Pregunta Identificacion" disabled="true" arrow="true">
+        				<ice:outputText value=""/>
+      				</ice:commandSortHeader>
+                </f:facet>
+                <ice:outputText value="#{survey.answers[0].question.text}" rendered="#{not empty survey.answers}" escape="false"/>
+            </ice:column>
+            <ice:column id="firstAnswer">
+                <f:facet name="header">
+                    <ice:commandSortHeader columnName="#{showSurveys.sortColumnName}" disabled="false" arrow="true">
+        				<ice:outputText value="Identificacion"/>
+      				</ice:commandSortHeader>
+                </f:facet>
+                <ice:outputText value="#{survey.answers[0].value}" rendered="#{not empty survey.answers}"/>
+            </ice:column>
+             
+             <ice:column id="identifyQuestion" rendered="#{showSurveys.hasIdentifyQuestion}">
+                <f:facet name="header">
+                    <ice:commandSortHeader columnName="#{showSurveys.sortColumnName}" disabled="false" arrow="true">
+        				<ice:outputText value="#{showSurveys.identityQuestionText}" escape="false" />
+      				</ice:commandSortHeader>
+                </f:facet>
+                <ice:outputText value="#{showSurveys.getAnswerIdentifyQuestion(survey)}" />
+            </ice:column>
+            <ice:column id="currentQuestion">
+                <f:facet name="header">
+                        <ice:outputText value="Pregunta actual"/>
+                </f:facet>
+                <ice:outputText value="#{survey.currentQuestion.text}" escape="false" />
+            </ice:column>
+            <ice:column id="childSurveys" rendered="#{showSurveys.parentSurveyStructure}">
+                <f:facet name="header">
+                        <ice:outputText value="Numero de encuestas hijas" />
+                </f:facet>
+                <ice:outputText value="#{showSurveys.countChildSurvey(survey)}"/>
+            </ice:column>
+            <ice:column id="surveyLink">
+                <f:facet name="header">
+                        <ice:outputText value="Acción"/>
+                </f:facet>
+                <ice:commandLink action="fill_survey.xhtml" value="Completar" rendered="#{showSurveys.isFillingState(survey.surveyState) or showSurveys.isNewState(survey.surveyState)}">
+                	<f:param name="surveyId" value="#{survey.id}" /> 
+                </ice:commandLink>
+                <ice:commandLink action="fill_survey.xhtml" value="Ver" rendered="#{showSurveys.isEndedState(survey.surveyState)}">
+                	<f:param name="surveyId" value="#{survey.id}" /> 
+                </ice:commandLink>
+            </ice:column>
+            <ice:column id="viewChildsurveysLink" rendered="#{showSurveys.parentSurveyStructure}">
+                <f:facet name="header">
+                        <ice:outputText value="Encuestas hijas"/>
+                </f:facet>
+                <ice:commandLink action="show_children_surveys.xhtml" value="Ver hijas" rendered="#{not empty survey.surveyStructure.childrenSurveyStructures and showSurveys.countChildSurvey(survey) > 0}">
+                	<f:param name="parentSurveyId" value="#{survey.id}" />
+                </ice:commandLink>
+            </ice:column>
+            <ice:column id="childsurveyLink" rendered="#{showSurveys.parentSurveyStructure}">
+                <f:facet name="header">
+                        <ice:outputText value="Iniciar hija"/>
+                </f:facet>
+                <ice:commandLink action="#{showSurveys.initSelectedChildSurvey(survey)}" value="Iniciar hija" rendered="#{not empty survey.surveyStructure.childrenSurveyStructures}" >
+                	
+                </ice:commandLink>
+            </ice:column>
+            <ice:column id="reOpen" renderedOnUserRole="ADMINISTRADOR">
+                <f:facet name="header">
+                        <ice:outputText value="Abrir"/>
+                </f:facet>
+                <ice:commandLink action="#{showSurveys.open(survey)}" value="Abrir" rendered="#{showSurveys.isEndedState(survey.surveyState)}" >
+                	
+                </ice:commandLink>
+            </ice:column>
+        </ice:dataTable>
+         -->
+         <h3>
+		<ice:outputText value="#{showSurveys.surveyStructureName}"/>
+		</h3>
+		 
+         <ace:dataTable id="surveysTable"
+                          value="#{showSurveys.surveys}"
+                          var="survey"
+                          paginator="true"
+                          paginatorPosition="both"
+                          rows="15"  emptyMessage="" filterEvent="enter" styleClass="bigTable" dynamic="false"
+                           >
+                          <!-- 
+                <ace:column id="num" headerText="#" sortBy="#{survey.id}"
+                            filterBy="#{survey.id}" filterMatchMode="contains">
+                    <h:outputText id="idCell" value="#{survey.id}"/>
+                </ace:column>
+                -->
+                <ace:column id="identifyQuestion" headerText="#{showSurveys.identityQuestionText}" sortBy="#{showSurveys.getAnswerIdentifyQuestion(survey)}" 
+                            rendered="#{showSurveys.hasIdentifyQuestion}" filterBy="#{showSurveys.getAnswerIdentifyQuestion(survey)}" filterMatchMode="startsWith"  >
+                    <h:outputText id="identifyQuestionCell" value="#{showSurveys.getAnswerIdentifyQuestion(survey)}"  />
+                </ace:column>
+                
+                <ace:column id="surveyState" headerText="Estado" sortBy="#{survey.surveyState.name}"
+                            filterBy="#{survey.surveyState.name}" filterMatchMode="exact" filterOptions="#{showSurveys.surveyStateItems}"  >
+                    <h:outputText id="surveyStateCell" value="#{survey.surveyState.name}"/>
+                </ace:column>
+                
+                <ace:column id="user" headerText="Usuario" sortBy="#{survey.userLogin}"
+                            filterBy="#{survey.userLogin}" filterMatchMode="contains" rendered="#{showSurveys.userAdmin}">
+                    <h:outputText id="userLoginCell" value="#{survey.userLogin}"  />
+                </ace:column>
+                
+                <ace:column id="currentQuestion" headerText="Pregunta actual">
+                    <h:outputText id="currentQuestionCell" value="#{survey.currentQuestion.text}"  escape="false" />
+                </ace:column>
+                
+                <ace:column id="surveyLink" headerText="Acción">
+                    <ice:commandLink action="fill_survey.xhtml" value="Completar" rendered="#{showSurveys.isFillingState(survey.surveyState) or showSurveys.isNewState(survey.surveyState)}">
+	                	<f:param name="surveyId" value="#{survey.id}" /> 
+	                </ice:commandLink>
+	                <ice:commandLink action="fill_survey.xhtml" value="Ver" rendered="#{showSurveys.isEndedState(survey.surveyState)}">
+	                	<f:param name="surveyId" value="#{survey.id}" />
+	                </ice:commandLink>
+	                <ice:commandLink action="fill_survey.xhtml" value="Ver" rendered="#{showSurveys.isClosedState(survey.surveyState)}" renderedOnUserRole="ADMINISTRADOR">
+	                	<f:param name="surveyId" value="#{survey.id}" /> 
+	                </ice:commandLink>
+                </ace:column>
+                
+                <ace:column id="reOpen" headerText="Administrar" rendered="#{showSurveys.userAdmin}" styleClass="noWrapColumn" >
+                    <ice:commandLink action="#{showSurveys.open(survey)}" value="Abrir" disabled="#{not (showSurveys.isEndedState(survey.surveyState) or showSurveys.isClosedState(survey.surveyState))}" />
+                    <h:outputText value=" | " renderedOnUserRole="ADMINISTRADOR"  disabled="#{not (showSurveys.isEndedState(survey.surveyState) or showSurveys.isClosedState(survey.surveyState))}" />
+                    
+                    <ice:commandLink action="#{showSurveys.editSurvey(survey)}" value="Editar" />
+                    
+                    <ice:panelConfirmation id="confirmDelete2"  
+					  acceptLabel="Sí"  
+					  cancelLabel="No"  
+					  message="Está seguro que desea eliminar la encuesta?"  
+					  title="Confirmar eliminación"  
+					  draggable="true"  rendered="true"  autoCentre="true" />
+                    
+                    <h:outputText value=" | "  rendered="#{not showSurveys.isDeletedState(survey.surveyState)}" />
+					<ice:commandLink action="#{showSurveys.delete(survey)}" value="Eliminar"  panelConfirmation="confirmDelete2" rendered="#{not showSurveys.isDeletedState(survey.surveyState)}" disabled="#{showSurveys.countChildSurvey(survey, showSurveys.childrenSurveyStructures[0]) > 0 or showSurveys.countChildSurvey(survey, showSurveys.childrenSurveyStructures[1]) > 0}" />
+						
+                </ace:column>
+                
+	            <ace:column id="child0" headerText="#{showSurveys.childrenSurveyStructures[0]}" rendered="#{not empty showSurveys.childrenSurveyStructures[0]}" styleClass="noWrapColumn">
+					<ice:panelGroup rendered="#{not showSurveys.isDeletedState(survey.surveyState)}">
+					<div align="left">
+					
+						<ice:commandLink action="#{showSurveys.createAndEditSelectedChildSurvey(survey,showSurveys.childrenSurveyStructures[0])}" value="Crear" disabled="#{empty showSurveys.parentSurveyStructure}" renderedOnUserRole="ADMINISTRADOR" />
+		                <ice:outputText value=" | " renderedOnUserRole="ADMINISTRADOR"  />
+		                
+		                <ice:commandLink action="#{showSurveys.createSelectedChildSurvey(survey,showSurveys.childrenSurveyStructures[0])}" value="Asignar" disabled="#{empty showSurveys.parentSurveyStructure}" renderedOnUserRole="ADMINISTRADOR" />
+		                <ice:outputText value=" | " renderedOnUserRole="ADMINISTRADOR" />
+						
+		                <ice:commandLink action="#{showSurveys.initSelectedChildSurvey(survey,showSurveys.childrenSurveyStructures[0])}" value="Iniciar" disabled="#{empty showSurveys.parentSurveyStructure}" />
+		                <ice:outputText value=" | "   />
+			                
+			            <ice:commandLink action="show_children_surveys.xhtml" value="Ver"  disabled="#{showSurveys.isEmptyCountChildren(survey, showSurveys.childrenSurveyStructures[0])}" >
+				        	<f:param name="parentSurveyId" value="#{survey.id}" />
+				            <f:param name="surveyStructureId" value="#{showSurveys.childrenSurveyStructures[0].id}" />
+			            </ice:commandLink>
+			            <ice:outputText value=" (#{showSurveys.countChildSurvey(survey, showSurveys.childrenSurveyStructures[0])})" rendered="#{not showSurveys.isEmptyCountChildren(survey, showSurveys.childrenSurveyStructures[0])}" />
+		           </div>
+		           </ice:panelGroup>
+	            </ace:column>
+	            
+	            <ace:column id="child1" headerText="#{showSurveys.childrenSurveyStructures[1]}" rendered="#{not empty showSurveys.childrenSurveyStructures[1]}" styleClass="noWrapColumn">
+					<ice:panelGroup rendered="#{not showSurveys.isDeletedState(survey.surveyState)}">
+					<div align="left">
+					
+						<ice:commandLink action="#{showSurveys.createAndEditSelectedChildSurvey(survey,showSurveys.childrenSurveyStructures[1])}" value="Crear" disabled="#{empty showSurveys.parentSurveyStructure}" renderedOnUserRole="ADMINISTRADOR" />
+		                <h:outputText value=" | " renderedOnUserRole="ADMINISTRADOR"  />
+		                
+		                <ice:commandLink action="#{showSurveys.createSelectedChildSurvey(survey,showSurveys.childrenSurveyStructures[1])}" value="Asignar" disabled="#{empty showSurveys.parentSurveyStructure}" renderedOnUserRole="ADMINISTRADOR" />
+		                <h:outputText value=" | " renderedOnUserRole="ADMINISTRADOR"  />
+						
+		                <ice:commandLink action="#{showSurveys.initSelectedChildSurvey(survey,showSurveys.childrenSurveyStructures[1])}" value="Iniciar" disabled="#{empty showSurveys.parentSurveyStructure}" />
+		                <h:outputText value=" | "   />
+			                
+			            <ice:commandLink action="show_children_surveys.xhtml" value="Ver "  disabled="#{showSurveys.isEmptyCountChildren(survey, showSurveys.childrenSurveyStructures[1])}" >
+				           	<f:param name="parentSurveyId" value="#{survey.id}" />
+				           	<f:param name="surveyStructureId" value="#{showSurveys.childrenSurveyStructures[1].id}" />
+			            </ice:commandLink>
+			                <ice:outputText value=" (#{showSurveys.countChildSurvey(survey, showSurveys.childrenSurveyStructures[1])})" rendered="#{not showSurveys.isEmptyCountChildren(survey, showSurveys.childrenSurveyStructures[1])}" />
+		                </div>
+		                </ice:panelGroup>
+	            </ace:column>
+                
+            </ace:dataTable>
+         
+     </ui:define>
+</ui:composition>

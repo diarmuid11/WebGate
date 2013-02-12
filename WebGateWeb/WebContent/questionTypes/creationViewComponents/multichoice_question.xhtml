@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:ace="http://www.icefaces.org/icefaces/components">
+	<h3>Ingrese el Texto de la Pregunta y adicione las opciones de categorias y opciones</h3>
+	<ice:panelGrid columns="2" cellpadding="5">
+		<ice:panelGrid>
+			<f:facet name="header">
+				<ice:outputText value="Opciones de Categoría " />
+			</f:facet>
+			<ice:dataTable value="#{creationViewAdapter.categoryOptions}" var="categoryOption">
+				<ice:column>
+					<f:facet name="header">
+						<ice:outputText value="Opciones" />
+					</f:facet>
+					<ice:inputText value="#{categoryOption.text}" />
+				</ice:column>
+				<ice:column>
+					<f:facet name="header">
+						<ice:outputText value="Eliminar" />
+					</f:facet>
+					<h:commandLink actionListener="#{creationViewAdapter.removeCategoryOption}"
+						value="Eliminar" rendered="#{categoryOption.forRemoval==false}">
+						<f:attribute name="categoryOption" value="#{categoryOption}" />
+					</h:commandLink>
+					<h:commandLink
+						actionListener="#{creationViewAdapter.undoRemoveCategoryOption}"
+						value="Deshacer" rendered="#{categoryOption.forRemoval==true}">
+						<f:attribute name="categoryOption" value="#{categoryOption}" />
+					</h:commandLink>
+				</ice:column>
+			</ice:dataTable>
+			<h:panelGrid columns="1">
+				<ice:inputText label="Nueva Pregunta"
+					value="#{creationViewAdapter.newCategoryOption}" />
+				<ice:commandButton value="Adicionar"
+					actionListener="#{creationViewAdapter.addCategoryOption}" />
+			</h:panelGrid>
+		</ice:panelGrid>
+
+		<ice:panelGrid>
+		<f:facet name="header">
+				<ice:outputText value="Opciones de Calificación" />
+			</f:facet>
+			<ice:dataTable value="#{creationViewAdapter.ratingOptions}" var="ratingOption">
+				<ice:column>
+					<f:facet name="header">
+						<ice:outputText value="Opciones" />
+					</f:facet>
+					<ice:inputText value="#{ratingOption.text}" />
+				</ice:column>
+				<ice:column>
+					<f:facet name="header">
+						<ice:outputText value="Eliminar" />
+					</f:facet>
+					<h:commandLink actionListener="#{creationViewAdapter.removeRatingOption}"
+						value="Eliminar" rendered="#{ratingOption.forRemoval==false}">
+						<f:attribute name="ratingOption" value="#{ratingOption}" />
+					</h:commandLink>
+					<h:commandLink
+						actionListener="#{creationViewAdapter.undoRemoveRatingOption}"
+						value="Deshacer" rendered="#{ratingOption.forRemoval==true}">
+						<f:attribute name="ratingOption" value="#{ratingOption}" />
+					</h:commandLink>
+				</ice:column>
+			</ice:dataTable>
+			<h:panelGrid columns="1">
+				<ice:inputText label="Nueva Pregunta"
+					value="#{creationViewAdapter.newRatingOption}" />
+				<ice:commandButton value="Adicionar"
+					actionListener="#{creationViewAdapter.addRatingOption}" />
+			</h:panelGrid>
+		</ice:panelGrid>
+	</ice:panelGrid>
+</ui:composition>

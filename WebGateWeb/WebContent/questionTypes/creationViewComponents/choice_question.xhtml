@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:ace="http://www.icefaces.org/icefaces/components"
+	> 
+	<h3>Ingrese el Texto de la Pregunta y adicione opciones</h3>
+	<ice:dataTable value="#{creationViewAdapter.options}" var="option">
+		<ice:column>
+            <f:facet name="header">
+                <ice:outputText value="Opciones"/>
+            </f:facet>
+        	<ice:inputText value="#{option.text}"/>
+    	</ice:column>
+        <ice:column>
+            <f:facet name="header">
+                <ice:outputText value="Eliminar"/>
+            </f:facet>
+            <h:commandLink actionListener="#{creationViewAdapter.removeOption}" value="Eliminar" rendered="#{option.forRemoval==false}">
+            	<f:attribute name="option" value="#{option}"/>
+            </h:commandLink>
+            <h:commandLink actionListener="#{creationViewAdapter.undoRemoveOption}" value="Deshacer" rendered="#{option.forRemoval==true}">
+            	<f:attribute name="option" value="#{option}"/>
+            </h:commandLink>
+        </ice:column>
+	</ice:dataTable>
+	<!-- 
+	<h:panelGrid columns="2">
+		<ice:outputLabel value="Tipo de control"/>
+		<ice:selectOneMenu partialSubmit="true" id="questionControl" 
+		value="#{creationViewAdapter.selectedControlTypeItem}" layout="pageDirection" tabindex="1">
+		<f:selectItem id="optionItem1" itemLabel="1 - Botones de opcion" itemValue="1" />
+		<f:selectItem id="optionItem2" itemLabel="2 - Menu de seleccion" itemValue="2" />
+		<f:selectItem id="optionItem2" itemLabel="3 - Lista" itemValue="3" />	
+	</ice:selectOneMenu>
+	</h:panelGrid>
+	 -->
+	<h:panelGrid columns="1">
+		<ice:inputText label="Nueva Pregunta" value="#{creationViewAdapter.newOption}"/>		
+		<ice:commandButton value="Adicionar" actionListener="#{creationViewAdapter.addOption}"/>
+	</h:panelGrid>
+
+</ui:composition>

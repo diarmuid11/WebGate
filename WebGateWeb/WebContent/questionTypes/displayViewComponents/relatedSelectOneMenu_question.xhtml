@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:ace="http://www.icefaces.org/icefaces/components">
+	<div style="min-height: 200px">
+	<ice:panelGroup>
+	
+	 	<ice:setEventPhase events="ValueChangeEvent"
+                                   phase="INVOKE_APPLICATION"
+                                   disabled="false">
+		<ice:selectOneMenu partialSubmit="true" id="mainQuestion"
+			value="#{fillViewAdapter.selectedParentItem}" layout="pageDirection"
+			tabindex="1" valueChangeListener="#{fillViewAdapter.parentValueChanged}">
+			<f:selectItem itemValue="" itemLabel="Seleccione una opción" />
+			<f:selectItems 
+				value="#{fillViewAdapter.parentOptions}" />
+		</ice:selectOneMenu>
+		</ice:setEventPhase>
+		<br />
+		 <ice:setEventPhase events="ValueChangeEvent"
+                                   phase="INVOKE_APPLICATION"
+                                   disabled="false">
+		<ice:selectOneMenu id="AutoCmpTxt" rows="10" width="300" partialSubmit="true"
+			value="#{fillViewAdapter.selectedChildItem}" tabindex="2" valueChangeListener="#{fillViewAdapter.childValueChanged}">
+			<f:selectItem itemValue="" itemLabel="Seleccione una opción" />
+			<f:selectItems  value="#{fillViewAdapter.childOptions}" />
+		</ice:selectOneMenu>
+		</ice:setEventPhase>
+		<!-- 
+		<ice:selectInputText id="AutoCmpTxt" rows="10" width="300"
+			value="#{fillViewAdapter.selectedChildItem}" textChangeListener="#{fillViewAdapter.changeSelection}" tabindex="2">
+			<f:selectItems id="AutoCmpTxtItms"
+				value="#{fillViewAdapter.childOptions}" />
+		</ice:selectInputText>
+		 -->
+		 <!-- 
+		 <ice:selectInputText id="AutoCmpTxt" rows="30" width="300"
+			value="#{fillViewAdapter.selectedChildItem}" tabindex="2">
+			<f:selectItems  value="#{fillViewAdapter.childOptions}" />
+		</ice:selectInputText>
+		 -->
+		 <br/>
+		 <ice:inputText value="#{fillViewAdapter.otherText}" disabled="#{not((empty fillViewAdapter.selectedChildItem) and (not empty fillViewAdapter.otherQuestion))}" tabindex="2" />
+		 
+	</ice:panelGroup>
+	</div>
+	<br />
+</ui:composition>

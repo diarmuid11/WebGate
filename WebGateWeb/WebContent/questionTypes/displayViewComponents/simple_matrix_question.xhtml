@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:c="http://java.sun.com/jstl/core">
+	<ice:panelGrid>
+		<f:facet name="header">
+			<ice:outputText value="" />
+		</f:facet>
+		<ice:dataTable value="#{fillViewAdapter.categoryOptions}"
+			var="categoryOption">
+			<ice:column>
+				<f:facet name="header">
+					<ice:outputText value="#{fillViewAdapter.categoryQuestion.text}" />
+				</f:facet>
+				<ice:outputText value="#{categoryOption.text}" />
+			</ice:column>
+			<ice:column>
+				<f:facet name="header">
+					<ice:outputText value="#{fillViewAdapter.ratingQuestion.text}" />
+				</f:facet>
+				
+					<ice:selectOneMenu partialSubmit="true" id="questionOptions"
+						value="#{fillViewAdapter.selectedItems[categoryOption]}"
+						layout="pageDirection" tabindex="1" rendered="#{fillViewAdapter.questionType eq '2'}">
+						<f:selectItems value="#{fillViewAdapter.ratingOptions}" />
+					</ice:selectOneMenu>
+				
+					<ice:selectOneRadio partialSubmit="true" id="questionOptions2"
+						value="#{fillViewAdapter.selectedItems[categoryOption]}"
+						layout="pageDirection" tabindex="1" rendered="#{fillViewAdapter.questionType eq '3'}">
+						<f:selectItems value="#{fillViewAdapter.ratingOptions}" />
+					</ice:selectOneRadio>
+				
+					<ice:inputText partialSubmit="true" id="questionOptions3"
+						value="#{fillViewAdapter.selectedItems[categoryOption]}"
+						tabindex="1" rendered="#{fillViewAdapter.questionType eq '1' or fillViewAdapter.questionType eq '8'}">
+						
+					</ice:inputText>
+			</ice:column>
+			
+		</ice:dataTable>
+	</ice:panelGrid>
+
+	<br />
+</ui:composition>

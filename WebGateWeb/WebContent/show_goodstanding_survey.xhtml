@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	template="/layout/print_template.xhtml"	>
+
+	<ui:define name="pageTitle">
+	
+	<ice:panelGrid columns="2">
+	<ice:graphicImage url="/img/logo-idt.png" />
+		<div align="center" style="width: 500px">
+			<h2>Paz y salvo</h2>
+		</div>
+	</ice:panelGrid>
+	
+		
+ 		 <!-- 
+		<ice:panelGrid columns="2" cellpadding="6">
+			<ice:outputLabel value="Encuesta actual" />
+			<ice:outputText value="#{fillSurvey.survey.surveyStructure.name}" />
+
+			<ice:outputLabel value="Encuesta madre"
+				rendered="#{not empty fillSurvey.survey.parentSurvey.surveyStructure}" />
+			<ice:outputText
+				value="#{fillSurvey.survey.parentSurvey.surveyStructure.name}"
+				rendered="#{not empty fillSurvey.survey.parentSurvey.surveyStructure}" />
+
+			<ice:outputLabel
+				value="Periodo de referencia"
+				rendered="#{fillSurvey.referenceTimeEnabled}" />
+			<ice:outputText
+				value="#{fillSurvey.referenceTime}"
+				rendered="#{fillSurvey.referenceTimeEnabled}" />
+
+			<ice:outputText
+				value="#{fillSurvey.parentIdentityQuestionText}"
+				rendered="#{fillSurvey.hasParentIdentifyQuestion}" escape="false" />
+			<ice:outputText
+				value="#{fillSurvey.parentAnswerIdentityQuestionText}"
+				rendered="#{fillSurvey.hasParentIdentifyQuestion}" />
+		 	
+			<ice:outputText
+				value="#{fillSurvey.identityQuestionText}"
+				rendered="#{fillSurvey.hasIdentifyQuestion}" escape="false" /> 
+			<ice:outputText
+				value="#{fillSurvey.answerIdentityQuestionText}"
+				rendered="#{fillSurvey.hasIdentifyQuestion}" />
+			</ice:panelGrid>
+			-->
+		 
+	</ui:define>
+		
+	<ui:define name="pageBody">
+		<h3>
+			ENCUESTA ESTABLECIMIENTOS DE ALOJAMIENTO EN BOGOTÁ<br/>
+			
+			<strong>El Instituto Distrital de Turismo</strong>
+			<br/>
+			
+			Certifica que:<br/>
+		</h3>
+		<ice:panelGrid columns="1" border="0" >
+		<ice:panelGrid columns="1">
+		<ice:panelGrid columns="2" style="width: 1000px">
+		
+			<ice:outputText escape="false" value="&lt;strong&gt;El establecimiento&lt;/strong&gt;  #{sessionBean.completeNameUser}" />
+			<ice:outputText escape="false" value="&lt;strong&gt;Identificado con el numero de usuario&lt;/strong&gt; #{sessionBean.currentUser}"  />
+			
+			<ice:outputText escape="false" value="&lt;strong&gt;Nombre comercial&lt;/strong&gt; #{showGoodstandingSurvey.showAnswer('preg_231_E_A_F')}" />
+			<ice:outputText escape="false" value="&lt;strong&gt;Numero de Identificación&lt;/strong&gt; #{showGoodstandingSurvey.showAnswer('preg_231_A_A_A')}"  />
+		
+			<ice:outputText escape="false" value="&lt;strong&gt;Dirección&lt;/strong&gt; #{showGoodstandingSurvey.showAnswer('preg_231_E_A_B')}" />
+			<ice:outputText value=""  />
+			
+			<ice:outputText escape="false" value="&lt;strong&gt;Periodo de Referencia&lt;/strong&gt; #{showGoodstandingSurvey.referenceTime}"   />
+			
+			<ice:outputText value="" />
+						
+		</ice:panelGrid>
+		<div align="left">
+			<ice:outputText value="Reportó la información de la encuesta mensual de establecimientos de alojamiento, correspondiente al periodo en referencia, cumpliendo de esta manera con el requerimiento de información.&lt;br/&gt; &lt;br/&gt;
+De ser necesario un funcionario del Instituto, se comunicará con ustedes para confirmar la información suministrada en este formulario o solicitar alguna aclaración." escape="false"   />
+		</div>
+		</ice:panelGrid>
+		</ice:panelGrid>
+		
+		<br/>
+		<ice:outputText value="Clave de verificación: #{showGoodstandingSurvey.verificationCode}"/> 
+		<br/> 
+		<ice:outputText value="Fecha de diligenciamiento: #{showGoodstandingSurvey.endedTime}"/>
+		<br/>
+	
+		<ice:commandButton value="Imprimir" onclick="javascript:window.print();" />
+		<br/>
+			<ice:commandLink id="list2" action="show_goodstanding_surveys" value="Ver el listado de Paz y salvos"/>
+		<br/>
+			<ice:commandLink id="list3" action="main" value="Inicio"/>
+		<br/>
+		
+	</ui:define>
+ 		
+</ui:composition>

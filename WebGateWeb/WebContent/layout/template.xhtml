@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component">
+<f:view>
+<script type="text/javascript">
+function enfocar(){
+	var con = document.getElementById('mainForm:mainQuestion');
+	con.focus();
+	con.select();
+	return false;
+}
+
+function enfocar(e){
+	if(!(typeof e === "undefined")){ 
+		if (e.keyCode == 13) {
+			var con = document.getElementById('mainForm:mainQuestion');
+			con.focus();
+			con.select();
+			if(!(typeof con.options === "undefined")){
+				con.options[0].focus();
+			}
+			
+			return false;
+		}
+	}
+}
+
+</script>
+	<h:head>
+		<title>WebGate</title>
+
+		<link rel="stylesheet" type="text/css"
+			href="#{request.contextPath}/xmlhttp/css/rime/rime-porlet.css" />
+		<ice:outputStyle
+			href="#{request.contextPath}/xmlhttp/css/rime/rime.css" />
+
+		<link rel="stylesheet" type="text/css"
+			href="#{request.contextPath}/css/webgate.css" />
+		<ice:outputStyle href="#{request.contextPath}/css/webgate.css" />
+		
+	</h:head>
+
+	<h:body lang="es" >
+	<h:panelGroup id="bodyGroup" styleClass="background">
+		<ice:form id="mainForm">
+		
+			<ice:panelBorder align="center" width="100%">
+
+				<f:facet name="north">
+					<ice:panelGroup styleClass="north">
+						<div align="left">
+							<ice:graphicImage value="/img/header.png" />
+						</div>
+						<ui:include src="menu.xhtml"/>
+					 
+						<div align="right">
+							<ice:outputText value="Usuario: #{sessionBean.currentUser}" rendered="false" />
+							<ice:outputText value="Encuesta de Establecimientos de Alojamiento" rendered="#{sessionBean.surveyed}" styleClass="mainTitle" />
+							<ice:outputConnectionStatus rendered="false" />
+						</div>
+					</ice:panelGroup>
+				</f:facet>
+
+				<f:facet name="center">
+					<ice:panelGroup styleClass="content">
+						<div align="center" style="min-height: 455px">
+							<div>
+								<ui:insert name="pageTitle" />
+								
+									<div align="left" style="width: 600px">
+										<ice:messages id="messagesqop" escape="false" style="font-size:120%;" />
+									</div>
+								
+							</div>
+							<div>
+								<ui:insert name="pageBody" />
+								<br/>
+							</div>
+						</div>
+					</ice:panelGroup>
+				</f:facet>
+
+				<f:facet name="south">
+
+					<ice:panelGroup styleClass="footer" >
+						
+						<div align="center">
+							<br/>
+							<br/>
+							<ice:outputText
+								value="Diseñado y desarrollado por la " styleClass="footerText" />
+							<ice:outputLink target="_blank"
+								value="http://www.correlibre.org/co" >
+								<ice:outputText value="Fundación Correlibre" styleClass="footerBoldText"/>
+							</ice:outputLink>
+							<ice:outputText
+								value=" y el " styleClass="footerText"/>
+							<ice:outputLink value="http://www.bogotaturismo.gov.co"
+								target="_blank"><ice:outputText value="Instituto Distrital de Turismo" styleClass="footerBoldText"/></ice:outputLink>
+							<br />
+							<ice:outputText
+								value="Instituto Distrital de Turismo: Calle 70 No. 7-40 | Tel (571) 2170711" styleClass="footerText" />
+							<br/>
+							<ice:outputText
+								value="Página Web:" styleClass="footerText" />
+							<ice:outputLink value="http://www.bogotaturismo.gov.co"
+								target="_blank"><ice:outputText value="http://www.bogotaturismo.gov.co" styleClass="footerBoldText"/></ice:outputLink>
+							
+							<br/>
+							<br/>
+							<ice:outputText
+								value="WebGate Versión #{msg.version}  #{msg.version_test_suffix} " styleClass="footerText" />
+							<br/>
+							<br/>
+							<br/>
+						</div>
+					</ice:panelGroup>
+				</f:facet>
+			</ice:panelBorder>
+		</ice:form>
+		</h:panelGroup>
+	</h:body>
+
+</f:view>
+</html>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	template="/layout/template.xhtml">
+	<ui:define name="pageTitle">		
+		<h1>
+			<ice:outputText value="Formatos de Encuesta" />
+		</h1>
+	</ui:define>
+
+	<ui:define name="pageBody">
+		<h3>
+			<ice:outputText value="Formatos de Encuesta asignados a mí" />
+		</h3>
+		<ice:dataPaginator for="ssTable" id="pg1" paginator="true"
+			fastStep="5" paginatorMaxPages="5" rowsCountVar="rowsCount"
+			displayedRowsCountVar="displayedRowsCount"
+			firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex"
+			pageCountVar="pageCount" pageIndexVar="pageIndex">
+
+			<ice:outputFormat styleClass="standard"
+				value="{0} Formatos encontrados. Pag {4} de {5}.">
+				<f:param value="#{rowsCount}" />
+				<f:param value="#{displayedRowsCount}" />
+				<f:param value="#{firstRowIndex}" />
+				<f:param value="#{lastRowIndex}" />
+				<f:param value="#{pageIndex}" />
+				<f:param value="#{pageCount}" />
+			</ice:outputFormat>
+			<f:facet name="first">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-first.gif" />
+			</f:facet>
+			<f:facet name="last">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-last.gif" />
+			</f:facet>
+			<f:facet name="previous">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-previous.gif" />
+			</f:facet>
+			<f:facet name="next">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-next.gif" />
+			</f:facet>
+			<f:facet name="fastforward">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-ff.gif" />
+			</f:facet>
+			<f:facet name="fastrewind">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-fr.gif" />
+			</f:facet>
+		</ice:dataPaginator>
+		<ice:dataTable var="ss"
+			value="#{showSurveyStructures.surveyStructures}" id="ssTable"
+			rows="10" cellpadding="4px">
+			<ice:column>
+				<f:facet name="header">
+					<ice:commandSortHeader columnName="Id" disabled="false"
+						arrow="true">
+						<ice:outputText value="Id" />
+					</ice:commandSortHeader>
+				</f:facet>
+				<ice:outputText value="#{ss.id}" />
+			</ice:column>
+			<ice:column>
+				<f:facet name="header">
+					<ice:commandSortHeader columnName="Nombre" disabled="false"
+						arrow="true">
+						<ice:outputText value="Nombre" />
+					</ice:commandSortHeader>
+				</f:facet>
+				<ice:outputText value="#{ss.name}" />
+			</ice:column>
+			<ice:column>
+				<f:facet name="header">
+					<ice:commandSortHeader columnName="Estado" disabled="false"
+						arrow="true">
+						<ice:outputText value="Estado" />
+					</ice:commandSortHeader>
+				</f:facet>
+				<ice:outputText value="#{ss.state.name}" />
+			</ice:column>
+			<ice:column>
+				<f:facet name="header">
+					<ice:outputText value="Acción" />
+				</f:facet>
+				<ice:commandLink action="fill_survey.xhtml" value="Nueva encuesta"
+					rendered="#{showSurveyStructures.isDeployed(ss)}">
+					<f:param name="surveyStructureId" value="#{ss.id}" id="p1" />
+				</ice:commandLink>
+			</ice:column>
+		</ice:dataTable>
+		<!-- 
+		<br />
+		<h3>
+			<ice:outputText value="Encuestas Asignadas a mí" />
+		</h3>
+		<br />
+		
+		<ice:dataPaginator for="surveyInstancesTable" paginator="true"
+			fastStep="5" paginatorMaxPages="5" rowsCountVar="rowsCount"
+			displayedRowsCountVar="displayedRowsCount"
+			firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex"
+			pageCountVar="pageCount" pageIndexVar="pageIndex">
+
+			<ice:outputFormat styleClass="standard"
+				value="{0} Encuestas encontradas. Pag {4} de {5}.">
+				<f:param value="#{rowsCount}" />
+				<f:param value="#{displayedRowsCount}" />
+				<f:param value="#{firstRowIndex}" />
+				<f:param value="#{lastRowIndex}" />
+				<f:param value="#{pageIndex}" />
+				<f:param value="#{pageCount}" />
+			</ice:outputFormat>
+			<f:facet name="first">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-first.gif" />
+			</f:facet>
+			<f:facet name="last">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-last.gif" />
+			</f:facet>
+			<f:facet name="previous">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-previous.gif" />
+			</f:facet>
+			<f:facet name="next">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-next.gif" />
+			</f:facet>
+			<f:facet name="fastforward">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-ff.gif" />
+			</f:facet>
+			<f:facet name="fastrewind">
+				<ice:graphicImage style="border:none;"
+					url="/xmlhttp/css/rime/css-images/arrow-fr.gif" />
+			</f:facet>
+		</ice:dataPaginator>
+		<ice:dataTable id="surveyInstancesTable" var="s"
+			value="#{showSurveyStructures.surveyInstances}" rows="20"
+			cellpadding="4px">
+			<ice:column id="surveyId">
+				<f:facet name="header">
+					<ice:commandSortHeader columnName="Id" disabled="false"
+						arrow="true">
+						<ice:outputText value="Id" />
+					</ice:commandSortHeader>
+				</f:facet>
+				<ice:outputText value="#{s[1].id}" />
+			</ice:column>
+			<ice:column id="surveyUser">
+				<f:facet name="header">
+					<ice:commandSortHeader columnName="Formato" disabled="false"
+						arrow="true">
+						<ice:outputText value="Encuesta" />
+					</ice:commandSortHeader>
+				</f:facet>
+				<ice:outputText value="#{s[1].name}" />
+			</ice:column>
+			<ice:column id="surveyState">
+				<f:facet name="header">
+					<ice:outputText value="Estado" />
+				</f:facet>
+				<ice:outputText value="#{s[2].name}" />
+			</ice:column>
+			<ice:column id="surveyStateCount">
+				<f:facet name="header">
+					<ice:outputText value="Cantidad" />
+				</f:facet>
+				<ice:outputText value="#{s[0]}" />
+			</ice:column>
+			<ice:column id="surveyLink">
+				<f:facet name="header">
+					<ice:outputText value="Acción" />
+				</f:facet>
+				<ice:commandLink action="show_surveys.xhtml" value="Ver encuestas">
+					<f:param name="surveyStructureId" value="#{s[1].id}" />
+					<f:param name="surveyState" value="#{s[2].name}" />
+				</ice:commandLink>
+			</ice:column>
+		</ice:dataTable>
+		 -->
+	</ui:define>
+</ui:composition>

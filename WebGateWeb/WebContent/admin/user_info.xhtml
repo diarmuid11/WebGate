@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+    xmlns:ice="http://www.icesoft.com/icefaces/component"
+    xmlns:ace="http://www.icefaces.org/icefaces/components"
+    template="/layout/template.xhtml"
+	>
+	<ui:define name="pageTitle">
+		<ice:outputText value="Encuestas del usuario  #{userInfo.userName}"></ice:outputText>
+		<br/>
+	</ui:define>		
+	<ui:define name="pageBody" >
+		<h:messages/>		
+		<h:panelGrid columns="2" border="0" cellspacing="7">		
+			<ice:outputText value="Total de encuestas sin iniciar"/>
+			<ice:outputText value="#{userInfo.newState}"/>
+			<ice:outputText value="Total encuestas iniciadas"/>			
+			<ice:outputText value="#{userInfo.fillingState}"/>
+			<ice:outputText value="Total encuestas finalizadas"/>			
+			<ice:outputText value="#{userInfo.endedState}"/>
+		</h:panelGrid>
+		<br/>
+		
+		<ice:dataTable border="1" value="#{userInfo.surveys}" var="u" >	
+			<!--	
+			<f:facet name="header">
+			 
+				<ice:selectOneMenu partialSubmit="true" value="#{userInfo.newOwner}">
+						<f:selectItem itemValue="" itemLabel="Seleccione un usuario"/>
+						<f:selectItems id="optionItem" value="#{userInfo.userItems}" />
+				</ice:selectOneMenu>
+				<ice:commandButton value="Nuevo responsable" actionListener="#{userInfo.changeOwner}">
+						<f:attribute name="surveyStructure" value="#{u[0]}" />
+						<f:attribute name="surveyState" value="#{u[1]}" />								
+				</ice:commandButton>
+			</f:facet>
+			 -->		
+			<ice:column>
+    			<ice:rowSelector ultiple="true"/>
+    				<f:facet name="header">
+      					<ice:outputText value="Encuesta"/>
+    				</f:facet>
+    			<ice:outputText value="#{u[0].name}"/>
+  			</ice:column>
+
+
+			<ice:column id="column2">
+				<f:facet name="header">
+					<ice:outputText value="Estado"></ice:outputText>
+				</f:facet>
+				<ice:outputText value="#{u[1].name}"/>	
+			</ice:column>
+			<ice:column id="column3">
+				<f:facet name="header">
+					<ice:outputText value="Cantidad"></ice:outputText>
+				</f:facet>
+				<ice:outputText value="#{u[2]}"/>	
+			</ice:column>
+			<ice:column id="column4">
+				<f:facet name="header">
+					<ice:outputText value="Asignacion de responsables"></ice:outputText>
+				</f:facet>
+				
+			</ice:column>
+		</ice:dataTable>
+	</ui:define>		
+</ui:composition>
+	

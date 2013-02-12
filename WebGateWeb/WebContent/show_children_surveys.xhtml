@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (C) 2012  
+diarmuid julian.rolon@gmail.com
+Gloria Patricia Meneses gpmeneses@gmail.com
+OScar Puentes oskarj84@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	template="/layout/template.xhtml">
+	<ui:define name="pageTitle">
+		<!-- 
+		<h1>
+			<ice:outputText value="Encuestas hijas"></ice:outputText>
+		</h1>
+		 -->
+	</ui:define>
+
+	<ui:define name="pageBody">
+		<!-- 
+		<ice:outputLabel value="Encuesta madre" />
+		<br />
+		 -->
+		<ice:outputText
+			value="#{showChildrenSurveys.parentSurvey.surveyStructure.name}" />
+		<br />
+		<ice:outputLabel value="#{showChildrenSurveys.parentSurvey.answers[0].question.text}"
+					rendered="#{not empty showChildrenSurveys.parentSurvey.answers}" />
+		<br />
+		<ice:outputText value="#{showChildrenSurveys.parentSurvey.answers[0].value}"
+					rendered="#{not empty showChildrenSurveys.parentSurvey.answers}" />
+		<br />
+		
+		<br />
+			<ice:commandLink action="#{showChildrenSurveys.initSelectedChildSurvey(showChildrenSurveys.parentSurvey)}" 
+			value="Iniciar hija" tabindex="1" 
+			rendered="#{not empty showChildrenSurveys.parentSurvey.surveyStructure.childrenSurveyStructures}" />
+		<br />
+		<br />
+			<ice:commandLink id="list2" action="show_surveys" value="Ver el listado de encuestas madre" >
+				<f:param name="surveyStructureId" value="#{showChildrenSurveys.parentSurvey.surveyStructure.id}" />
+				<f:param name="surveyId" value="#{showChildrenSurveys.parentSurvey.id}" />
+			</ice:commandLink>
+		<br />
+		<br />
+		<!-- 
+		<ice:outputLabel value="Estado" />
+		<ice:selectOneMenu value="#{showSurveys.surveyState}" partialSubmit="true">
+			<f:selectItem itemValue="" itemLabel="Todos"/>
+			<f:selectItems value="#{showChildrenSurveys.surveyStates}"/>
+		</ice:selectOneMenu> 
+		<ice:commandButton value="Actualizar" actionListener="#{showChildrenSurveys.updateSurveys}" />
+		<br/>
+		<br/>
+		-->
+		<!-- 
+		<ice:dataPaginator for="surveyInstancesTable" id="pgt1"
+			paginator="true" fastStep="5" paginatorMaxPages="5"
+			rowsCountVar="rowsCount" displayedRowsCountVar="displayedRowsCount"
+			firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex"
+			pageCountVar="pageCount" pageIndexVar="pageIndex">
+
+			<ice:outputFormat styleClass="standard"
+				value="{0} encuestas encontradas. Pag {4} de {5}.">
+				<f:param value="#{rowsCount}" />
+				<f:param value="#{displayedRowsCount}" />
+				<f:param value="#{firstRowIndex}" />
+				<f:param value="#{lastRowIndex}" />
+				<f:param value="#{pageIndex}" />
+				<f:param value="#{pageCount}" />
+			</ice:outputFormat>
+			<f:facet name="first">
+				<ice:graphicImage style="border:none;" id="img1"
+					url="/xmlhttp/css/rime/css-images/arrow-first.gif"></ice:graphicImage>
+			</f:facet>
+			<f:facet name="last">
+				<ice:graphicImage style="border:none;" id="img2"
+					url="/xmlhttp/css/rime/css-images/arrow-last.gif"></ice:graphicImage>
+			</f:facet>
+			<f:facet name="previous">
+				<ice:graphicImage style="border:none;" id="img3"
+					url="/xmlhttp/css/rime/css-images/arrow-previous.gif"></ice:graphicImage>
+			</f:facet>
+			<f:facet name="next">
+				<ice:graphicImage style="border:none;" id="img4"
+					url="/xmlhttp/css/rime/css-images/arrow-next.gif"></ice:graphicImage>
+			</f:facet>
+			<f:facet name="fastforward">
+				<ice:graphicImage style="border:none;" id="img5"
+					url="/xmlhttp/css/rime/css-images/arrow-ff.gif"></ice:graphicImage>
+			</f:facet>
+			<f:facet name="fastrewind">
+				<ice:graphicImage style="border:none;" id="img6"
+					url="/xmlhttp/css/rime/css-images/arrow-fr.gif"></ice:graphicImage>
+			</f:facet>
+		</ice:dataPaginator>
+		<ice:dataTable id="surveyInstancesTable" var="survey"
+			value="#{showChildrenSurveys.surveys}" rows="20" cellpadding="4" sortColumn="#{showChildrenSurveys.sortColumnName}" sortAscending="#{showChildrenSurveys.ascending}">
+			        
+			<ice:column id="surveyId">
+				<f:facet name="header">
+					<ice:commandSortHeader columnName="" disabled="true" arrow="true">
+						<ice:outputText value="#" />
+					</ice:commandSortHeader>
+				</f:facet>
+				<ice:outputText value="#{survey.id}" />
+			</ice:column>
+			<ice:column id="surveyStructure">
+				<f:facet name="header">
+					<ice:commandSortHeader columnName="" disabled="true" arrow="true">
+						<ice:outputText value="Formato" />
+					</ice:commandSortHeader>
+				</f:facet>
+				<ice:outputText value="#{survey.surveyStructure.name}" />
+			</ice:column>
+			<ice:column id="surveyState">
+				<f:facet name="header">
+					<ice:commandSortHeader columnName="Estado" disabled="true"
+						arrow="true">
+						<ice:outputText value="Estado" />
+					</ice:commandSortHeader>
+				</f:facet>
+				<ice:outputText value="#{survey.surveyState.name}" />
+			</ice:column>
+			<ice:column id="firstQuestion">
+				<f:facet name="header">
+					<ice:commandSortHeader columnName="Primera pregunta"
+						disabled="true" arrow="true">
+						<ice:outputText value="" />
+					</ice:commandSortHeader>
+				</f:facet>
+				<ice:outputText value="#{survey.answers[0].question.text}"
+					rendered="#{not empty survey.answers}" />
+			</ice:column>
+			<ice:column id="firstAnswer">
+				<f:facet name="header">
+					<ice:commandSortHeader columnName="#{showChildrenSurveys.sortColumnName}" disabled="false" arrow="true">
+						<ice:outputText value="Identificacion" />
+					</ice:commandSortHeader>
+				</f:facet>
+				<ice:outputText value="#{survey.answers[0].value}"
+					rendered="#{not empty survey.answers}" />
+			</ice:column>
+			<ice:column id="currentQuestion">
+				<f:facet name="header">
+					<ice:outputText value="Pregunta actual" />
+				</f:facet>
+				<ice:outputText value="#{survey.currentQuestion.text}" />
+			</ice:column>
+			<ice:column id="surveyLink">
+				<f:facet name="header">
+					<ice:outputText value="Acción" />
+				</f:facet>
+				<ice:commandLink action="fill_survey.xhtml" value="Completar"
+					rendered="#{showChildrenSurveys.isFillingState(survey.surveyState) or showChildrenSurveys.isNewState(survey.surveyState)}">
+					<f:param name="surveyId" value="#{survey.id}" />
+				</ice:commandLink>
+				<ice:commandLink action="fill_survey.xhtml" value="Ver"
+					rendered="#{showChildrenSurveys.isEndedState(survey.surveyState)}">
+					<f:param name="surveyId" value="#{survey.id}" />
+				</ice:commandLink>
+			</ice:column>
+			<ice:column id="surveyReopen" renderedOnUserRole="ADMINISTRADOR">
+				<f:facet name="header">
+					<ice:outputText value="Abrir" />
+				</f:facet>
+				<ice:commandLink action="#{showChildrenSurveys.open(survey)}" value="Abrir"
+					rendered="#{showChildrenSurveys.isEndedState(survey.surveyState)}">
+				</ice:commandLink>
+			</ice:column>
+			<ice:column id="surveyDelete" renderedOnUserRole="ADMINISTRADOR">
+				<f:facet name="header">
+					<ice:outputText value="Eliminar" />
+				</f:facet>
+				<ice:panelConfirmation id="confirmDelete2"  
+				  acceptLabel="Sí"  
+				  cancelLabel="No"  
+				  message="Está seguro que desea eliminar la encuesta?"  
+				  title="Confirmar eliminación"  
+				  draggable="true"  rendered="true"  autoCentre="true" /> 
+				<ice:commandLink actionListener="#{showChildrenSurveys.delete}" value="Eliminar"  panelConfirmation="confirmDelete2" rendered="#{not showChildrenSurveys.isDeletedState(survey.surveyState)}" >
+					<f:attribute name="survey" value="#{survey}" />
+				</ice:commandLink>
+			</ice:column>
+		</ice:dataTable>
+		 -->
+		 <h3>
+		<ice:outputText value="#{showChildrenSurveys.surveyStructureName}"/>
+		</h3>
+		 
+         <ace:dataTable id="surveysTable"
+                          value="#{showChildrenSurveys.surveys}"
+                          var="survey"
+                          paginator="true"
+                          paginatorPosition="both"
+                          rows="15" emptyMessage="" styleClass="bigTable" dynamic="false">
+
+                <ace:column id="identifyQuestion" headerText="#{showChildrenSurveys.identityQuestionText}" sortBy="#{showChildrenSurveys.getAnswerIdentifyQuestion(survey)}" 
+                            rendered="#{showChildrenSurveys.hasIdentifyQuestion}" filterBy="#{showChildrenSurveys.getAnswerIdentifyQuestion(survey)}" filterMatchMode="contains">
+                    <h:outputText id="identifyQuestionCell" value="#{showChildrenSurveys.getAnswerIdentifyQuestion(survey)}"  />
+                </ace:column>
+                
+                <ace:column id="surveyState" headerText="Estado" sortBy="#{survey.surveyState.name}"
+                            filterBy="#{survey.surveyState.name}" filterMatchMode="contains" filterOptions="#{showSurveys.surveyStateItems}" >
+                    <h:outputText id="surveyStateCell" value="#{survey.surveyState.name}"/>
+                </ace:column>
+                
+                <ace:column id="user" headerText="Usuario" sortBy="#{survey.userLogin}"
+                            filterBy="#{survey.userLogin}" filterMatchMode="contains" rendered="#{sessionBean.admin}">
+                    <h:outputText id="userLoginCell" value="#{survey.userLogin}"  />
+                </ace:column>
+                
+                <ace:column id="referenceTime" headerText="Periodo de referencia" sortBy="#{showChildrenSurveys.getReferenceTime(survey)}"
+                            filterBy="#{showChildrenSurveys.getReferenceTime(survey)}" filterMatchMode="contains" rendered="#{sessionBean.admin or sessionBean.surveyor}">
+                    <h:outputText id="referenceTimeCell" value="#{showChildrenSurveys.getReferenceTime(survey)}"  />
+                </ace:column>
+                
+                <ace:column id="currentQuestion" headerText="Pregunta actual">
+                    <h:outputText id="currentQuestionCell" value="#{survey.currentQuestion.text}"  escape="false" />
+                </ace:column>
+                
+                <ace:column id="surveyLink" headerText="Acción">
+                    <ice:commandLink action="fill_survey.xhtml" value="Completar" rendered="#{showChildrenSurveys.isFillingState(survey.surveyState) or showSurveys.isNewState(survey.surveyState)}">
+	                	<f:param name="surveyId" value="#{survey.id}" /> 
+	                </ice:commandLink>
+	                <ice:commandLink action="fill_survey.xhtml" value="Ver" rendered="#{showChildrenSurveys.isEndedState(survey.surveyState) or showChildrenSurveys.isClosedState(survey.surveyState)}">
+	                	<f:param name="surveyId" value="#{survey.id}" /> 
+	                </ice:commandLink>
+	                
+	                <ice:panelConfirmation id="confirmDelete3"  
+				  acceptLabel="Sí"  
+				  cancelLabel="No"  
+				  message="Está seguro que desea eliminar la encuesta?"  
+				  title="Confirmar eliminación"  
+				  draggable="true"  rendered="true"  autoCentre="true" />
+	                
+	                <h:outputText value=" | "  rendered="#{not showChildrenSurveys.isDeletedState(survey.surveyState) and not (showChildrenSurveys.isEndedState(survey.surveyState) or showChildrenSurveys.isClosedState(survey.surveyState)) }" />
+					<ice:commandLink actionListener="#{showChildrenSurveys.delete}" value="Eliminar"  
+					panelConfirmation="confirmDelete3" 
+					rendered="#{not showChildrenSurveys.isDeletedState(survey.surveyState) and not (showChildrenSurveys.isEndedState(survey.surveyState) or showChildrenSurveys.isClosedState(survey.surveyState)) }" >
+						<f:attribute name="survey" value="#{survey}" />
+					</ice:commandLink>
+	                
+                </ace:column>
+                
+                <ace:column id="delete" headerText="Administración" rendered="#{sessionBean.admin}" styleClass="noWrapColumn">
+                <ice:commandLink action="#{showChildrenSurveys.open(survey)}" value="Abrir" rendered="#{sessionBean.admin and (showChildrenSurveys.isEndedState(survey.surveyState) or showChildrenSurveys.isClosedState(survey.surveyState))}" />
+                <h:outputText value=" | " rendered="#{sessionBean.admin and (showChildrenSurveys.isEndedState(survey.surveyState) or showChildrenSurveys.isClosedState(survey.surveyState))}"  />
+                
+                <ice:commandLink action="#{showChildrenSurveys.editSurvey(survey)}" value="Editar" />
+                
+                <ice:panelConfirmation id="confirmDelete2"  
+				  acceptLabel="Sí"  
+				  cancelLabel="No"  
+				  message="Está seguro que desea eliminar la encuesta?"  
+				  title="Confirmar eliminación"  
+				  draggable="true"  rendered="true"  autoCentre="true" />
+				 
+				<h:outputText value=" | "  rendered="#{not showChildrenSurveys.isDeletedState(survey.surveyState)}" />
+				<ice:commandLink actionListener="#{showChildrenSurveys.delete}" value="Eliminar"  
+				panelConfirmation="confirmDelete2" 
+				rendered="#{not showChildrenSurveys.isDeletedState(survey.surveyState)}" >
+					<f:attribute name="survey" value="#{survey}" />
+				</ice:commandLink>
+				
+                </ace:column>
+            </ace:dataTable>
+	</ui:define>
+
+</ui:composition>
